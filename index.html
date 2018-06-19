@@ -69,11 +69,131 @@
           </aside>
         </section>
 
-        </section>
+      </section>
 
-        <section>Slide 1</section>
+      <section>
+        <h3>The Problem: Making Pythonic Classes</h3>
+        <ul>
+          <li>We always need a __init__</li>
+          <li>We should always have a __repr__</li>
+          <li>It's often useful to have a __eq__ (get __ne__ for free in Python 3)</li>
+          <li>It frequently makes sense have implement __lt__, __ge__, __gt__, __le__</li>
+          <li>functools.total_ordering in Python 3</li>
+          <li>Hashability (for use in sets and dictionaries)</li>
+          <li>Iterability (when unpacking makes sense)</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 6 minutes
+        </aside>
+      </section>
 
-        <section>Slide 2</section>
+      <section>
+        <h3>Solution 1: collections.namedtuple</h3>
+        <ul>
+          <li>Built-in to the standard library since Python 2.6</li>
+          <li>Convenient for simple classes without functions</li>
+          <li>Can also be inherited from to add custom functionality</li>
+          <li>The _fields attribute is useful for extending functionality</li>
+          <li>There are quirks
+            <ul>
+              <li>errors in usage sometimes give really bizarre tracebacks</li>
+              <li>inheritance from tuple results in some oddities (e.g. multiplication and addition)</li>
+              <li>immutable (what if you want to change stuff?!)</li>
+              <li>no type hinting</li>
+              <li>Type of namedtuple is ignored</li>
+            </ul>
+          </li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 4 minutes
+        </aside>
+      </section>
+
+      <section>
+        <h3>Solution 2: typing.NamedTuple</h3>
+        <ul>
+          <li>Built-in to the standard library since Python 3.5</li>
+          <li>Like collections.namedtuple but a much nicer syntax</li>
+          <li>Type hinting built straight in!</li>
+          <li>Allows default values</li>
+          <li>Still has most of the namedtuple quirks</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes
+        </aside>
+      </section>
+
+      <section>
+        <h3>Solution 3: attrs library</h3>
+        <ul>
+          <li>Pros
+            <ul>
+              <li>Works for both mutable and immutable things</li>
+              <li>More flexible than namedtuple or NamedTuple</li>
+              <li>Easy conversion to other types</li>
+              <li>Allows for validators, typing hinting syntax, etc</li>
+            </ul>
+          </li>
+          <li>Cons
+            <ul>
+              <li>Not in the standard library</li>
+              <li>Usage is a little odd (I find @attr.s awkward to explain)</li>
+            </ul>
+          </li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 3 minutes
+        </aside>
+      </section>
+
+      <section>
+        <h3>Solution 4: dataclasses</h3>
+        <ul>
+          <li>Available as a third-party library</li>
+          <li>Borrows many attrs features but keeps API very simple</li>
+          <li>Will be bult-in to the standard library in Python 3.7</li>
+          <li>Some things dataclasses doesn't support that attrs does</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 4 minutes
+        </aside>
+      </section>
+
+      <section>
+        <h3>Data Classes Recipes</h3>
+        <ul>
+          <li>Immutability</li>
+          <li>Orderability</li>
+          <li>Iterability</li>
+          <li>Hashability</li>
+          <li>Inheritance</li>
+          <li>Default values</li>
+          <li>Extra attributes</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 4 minutes
+        </aside>
+      </section>
+
+      <section>
+        <h3>Takeaways</h3>
+        <ul>
+          <li>You don't always need custom classes for your data, but it can be very handy</li>
+          <li>Your commonly used classes should feel Pythonic</li>
+          <li>You don't want lots of boilerplate in your classes</li>
+          <li>Use dataclasses or attrs when you need custom data-heavy classes</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes
+        </aside>
+      </section>
 
       <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
         <h2>Need help getting your team <nobr>up to speed on Python?</nobr></h2>
