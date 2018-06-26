@@ -65,93 +65,421 @@
             - I also host free live webcasts on Python-related topics a couple times each month.  I call that Python Chat.
             - I'm a co-organizers of my local Python meetup in San Diego
             - And I'm a former director at The Python Software Foundation
-            - TODO...
+            - That's enough about me. Let's talk about classes.
           </aside>
         </section>
 
       </section>
 
       <section>
-        <h3>The Problem: Making Pythonic Classes</h3>
+        <h3 class="fragment strike" data-fragment-index=1>Pythonic Classes</h3>
+        <h2 class="fragment" data-fragment-index=1>Friendly Classes</h2>
         <ul>
-          <li>We always need a __init__</li>
-          <li>We should always have a __repr__</li>
-          <li>It's often useful to have a __eq__ (get __ne__ for free in Python 3)</li>
-          <li>It frequently makes sense have implement __lt__, __ge__, __gt__, __le__</li>
-          <li>functools.total_ordering in Python 3</li>
-          <li>Hashability (for use in sets and dictionaries)</li>
-          <li>Iterability (when unpacking makes sense)</li>
+          <li class="fragment">have nice string representations</li>
+          <li class="fragment">can be compared to each other</li>
+          <li class="fragment">embrace operator overloading</li>
         </ul>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 6 minutes
+          - I'd like to talk about making classes that are easy for developers to use
+          - I'm tempted to use the phrase Pythonic classes to describe this idea, but that word Pythonic is a bit loaded, so I'm going to instead say that we're making **friendly** classes
+          - Friendly classes are friendly for the developers who use them
+          - They have a nice string representation
+          - They can be compared to each other in ways that make sense
+          - And whenever it makes, they overload operators to allow themselves to be addable, iterable, hashable on so on
         </aside>
       </section>
 
       <section>
-        <h3>Solution 1: collections.namedtuple</h3>
-        <ul>
-          <li>Built-in to the standard library since Python 2.6</li>
-          <li>Convenient for simple classes without functions</li>
-          <li>Can also be inherited from to add custom functionality</li>
-          <li>The _fields attribute is useful for extending functionality</li>
-          <li>There are quirks
-            <ul>
-              <li>errors in usage sometimes give really bizarre tracebacks</li>
-              <li>inheritance from tuple results in some oddities (e.g. multiplication and addition)</li>
-              <li>immutable (what if you want to change stuff?!)</li>
-              <li>no type hinting</li>
-              <li>Type of namedtuple is ignored</li>
-            </ul>
-          </li>
-        </ul>
+
+      <section>
+        <h1>Example: a Month class</h1>
+      </section>
+
+      <section>
+        <h2><span class="fragment" data-fragment-index=5>Comparability</span> <span class="fragment" data-fragment-index=9>and Orderability</span></h2>
+        <div class="container">
+        <pre class="col python"><code data-trim data-noescape>
+>>> <span class="fragment" data-fragment-index=1>m = Month(2018, 6)
+>>> </span><span class="fragment" data-fragment-index=3>m
+Month(year=2018, month=6)
+>>> </span><span class="fragment" data-fragment-index=6>m == Month(2018, 6)
+True
+>>> </span><span class="fragment" data-fragment-index=7>m != Month(2018, 6)
+False
+>>> </span><span class="fragment" data-fragment-index=10>m &lt; Month(2018, 12)
+True
+>>> </span><span class="fragment" data-fragment-index=12>m > Month(2019, 1)
+False
+>>> </span><span class="fragment" data-fragment-index=14>m &lt;= Month(2018, 12)
+True
+>>> </span><span class="fragment" data-fragment-index=16>m >= Month(2018, 6)
+True</span>
+        </code></pre>
+        <pre class="col python"><code data-trim data-noescape>
+<span class="fragment" data-fragment-index=2>class Month:
+    def __init__(self, year, month):
+        pass</span>
+    <span class="fragment" data-fragment-index=4>def __repr__(self):
+        pass</span>
+    <span class="fragment" data-fragment-index=8>def __eq__(self, other):
+        pass</span>
+    <span class="fragment" data-fragment-index=11>def __lt__(self, other):
+        pass</span>
+    <span class="fragment" data-fragment-index=13>def __gt__(self, other):
+        pass</span>
+    <span class="fragment" data-fragment-index=15>def __le__(self, other):
+        pass</span>
+    <span class="fragment" data-fragment-index=17>def __ge__(self, other):
+        pass</span>
+        </code></pre>
+        </div>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 4 minutes
+          - If you want a class in Python that accepts attributes, you'll probably want an initializer
+          - If you want it to have a helpful string representation, you'll also want a dunder repr method
+          - But what if you also wanted your classes to be comparable to other classes?... using equality and inequality?
+          - In that case you'll want a dunder eq method.
+          - If you wanted to go further, by allowing your classes to be sortable, you'll need to implement the less than operator with dunder lt, the greater than operator with dunder gt, the less than or equal to operator with dunder le, and the greater than or equal to operator with dunder ge
+          - After all this, our class is going to look pretty big
         </aside>
       </section>
 
       <section>
-        <h3>Solution 2: typing.NamedTuple</h3>
-        <ul>
-          <li>Built-in to the standard library since Python 3.5</li>
-          <li>Like collections.namedtuple but a much nicer syntax</li>
-          <li>Type hinting built straight in!</li>
-          <li>Allows default values</li>
-          <li>Still has most of the namedtuple quirks</li>
-        </ul>
+        <pre class=""><code data-trim data-noescape>
+class Month:
+    def __init__(self, year, month):
+        self.year, self.month = year, month
+    def __repr__(self):
+        return f"Month(year={self.year}, month={self.month})"
+    def <span class="fragment bold" data-fragment-index=1>__eq__</span>(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) <span class="fragment highlight-blue" data-fragment-index=2>==</span> (other.year, other.month)
+    def <span class="fragment bold" data-fragment-index=1>__lt__</span>(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) <span class="fragment highlight-blue" data-fragment-index=2>&lt;</span> (other.year, other.month)
+    def <span class="fragment bold" data-fragment-index=1>__gt__</span>(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) <span class="fragment highlight-blue" data-fragment-index=2>&gt;</span> (other.year, other.month)
+    def <span class="fragment bold" data-fragment-index=1>__le__</span>(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) <span class="fragment highlight-blue" data-fragment-index=2>&lt;=</span> (other.year, other.month)
+    def <span class="fragment bold" data-fragment-index=1>__ge__</span>(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) <span class="fragment highlight-blue" data-fragment-index=2>&gt;=</span> (other.year, other.month)</span>
+        </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes
+          - You might notice there's a lot of code duplication here
+          - All five of those comparison dunder methods are pretty much the same method
+          - The only real difference is the operator they use
+          - There is a helper in the standard library to make this class a bit shorter
         </aside>
       </section>
 
       <section>
-        <h3>Solution 3: attrs library</h3>
-        <ul>
-          <li>Pros
-            <ul>
-              <li>Works for both mutable and immutable things</li>
-              <li>More flexible than namedtuple or NamedTuple</li>
-              <li>Easy conversion to other types</li>
-              <li>Allows for validators, typing hinting syntax, etc</li>
-            </ul>
-          </li>
-          <li>Cons
-            <ul>
-              <li>Not in the standard library</li>
-              <li>Usage is a little odd (I find @attr.s awkward to explain)</li>
-            </ul>
-          </li>
-        </ul>
+        <pre class=""><code data-trim data-noescape>
+from functools import total_ordering
+
+
+@total_ordering
+class Month:
+    def __init__(self, year, month):
+        self.year, self.month = year, month
+    def __repr__(self):
+        return f"Month(year={self.year}, month={self.month})"
+    def __eq__(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) == (other.year, other.month)
+    def __lt__(self, other):
+        if not isinstance(other, Month):
+            return NotImplemented
+        return (self.year, self.month) &lt; (other.year, other.month)
+        </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 3 minutes
+          - It's called `total_ordering` and it lives in the `functools` module
+          - It allows us to implement just 2 comparison operators and it'll implement the others automatically
+          - But there's still a lot of boilerplate code needed for this class
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h1>Example: a Point class</h1>
+      </section>
+
+      <section>
+        <h2><span class="fragment" data-fragment-index=5>Iterability</span> <span class="fragment" data-fragment-index=7>and Immutability</span></h2>
+        <div class="container">
+        <pre class="col python"><code data-trim data-noescape>
+>>> <span class="fragment" data-fragment-index=1>p = Point(1, 2, 3)
+>>> </span><span class="fragment" data-fragment-index=2>p
+Point(x=1, y=2, z=3)
+>>> </span><span class="fragment" data-fragment-index=3>p == Point(1, 2, 3)
+True
+>>> </span><span class="fragment" data-fragment-index=4>x, y, z = p
+>>> </span><span class="fragment" data-fragment-index=8>p.x = 4
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1
+  File "&lt;string>", line 3
+AttributeError: object is immutable
+>>> </span><span class="fragment" data-fragment-index=12>{Point(1, 2, 3), Point(1, 2, 3)}
+{Point(x=1, y=2, z=3)}</span>
+        </code></pre>
+        <pre class="col python"><code data-trim data-noescape>
+<span class="fragment" data-fragment-index=1>class Point:
+    def __init__(self, x, y, z):
+        pass</span>
+    <span class="fragment" data-fragment-index=2>def __repr__(self):
+        pass</span>
+    <span class="fragment" data-fragment-index=3>def __eq__(self, other):
+        pass</span>
+    <span class="fragment" data-fragment-index=6>def __iter__(self):
+        pass</span>
+    <span class="fragment" data-fragment-index=9>def __setattr__(self, name, value):
+        pass</span>
+    <span class="fragment" data-fragment-index=13>def __hash__(self):
+        pass</span>
+        </code></pre>
+        </div>
+        <aside class="notes" data-markdown>
+          - Just as in our last example, we're going to want our class to accept arguments, have a nice string representation, and allow itself to be compared to other `Point` objects
+          - But what if we also want to allow our class to be unpacked into three coordinate variables using multiple assignment?
+          - Multiple assignment requires that our class be iterable
+          - We'll need a dunder iter method for that
+          - We might also want our class to be immutable, meaning we can't override any of the attributes after we've created a `Point` object
+          - For this we need to make a custom dunder setattr method
+          - And if our class is immutable it should be safe to use it in dictionary keys and sets
+          - But we'll need a dunder hash method for that
+          - So after all of this work, our `Point` class ends up looking something like this...
         </aside>
       </section>
 
       <section>
-        <h3>Solution 4: dataclasses</h3>
+        <pre class=""><code data-trim data-noescape>
+class Point:
+    def __init__(self, x, y, z):
+        self.x, self.y, self.z = x, y, z
+    def __repr__(self):
+        return f"Point(x={self.x}, y={self.y}, z={self.z})"
+    def __eq__(self, other):
+        if not isinstance(other, Point):
+            return NotImplemented
+        return tuple(self) == tuple(other)
+    def __iter__(self):
+        yield from (self.x, self.y, self.z)
+    def __setattr__(self, attribute, value):
+        raise AttributeError("object is immutable")
+    __delattr__ = __setattr__
+    def __hash__(self):
+        return hash(tuple(self))
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This class does quite a bit without too many lines of code
+          - But most of this code is pretty standard and is basically boilerplate code
+          - And we can actually get all of this functionality for free...
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h1>namedtuple</h1>
+        <aside class="notes" data-markdown>
+          - By using the `namedtuple` helper function from the Python standard library
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment"><code data-trim data-noescape>
+from collections import namedtuple
+
+<span class="fragment">Point = namedtuple('Point', ['x', 'y', 'z'])</span>
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> <span class="fragment">p
+Point(x=1, y=2, z=3)
+>>> </span><span class="fragment">p == Point(1, 2, 3)
+True
+>>> </span><span class="fragment">p.x = 4
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+AttributeError: cannot set attribute
+>>> </span><span class="fragment">{p, p}
+{Point(x=1, y=2, z=3)}</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - The `namedtuple` function lives in the `collections` module
+          - `namedtuple` isn't a class so much as a factory function that creates new classes
+          - When you call `namedtuple`, you pass it in the name of the class and the attributes the class should have, and it'll dynamically create a new class for you
+          - The classes created by `namedtuple` have a friendly string representation
+          - They can be compared to each other
+          - And they're immutable, and hashable, just like tuples
+          - If you find it unintuitive that calling `namedtuple` gives you a class back, you can use a nicer syntax for creating named tuples...
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+from typing import NamedTuple
+
+class Point(NamedTuple):
+    x: float <span class="fragment current-visible" data-fragment-index=3>= 0</span>
+    y: float <span class="fragment current-visible" data-fragment-index=3>= 0</span>
+    z: float <span class="fragment current-visible" data-fragment-index=3>= 0</span><span class="fragment" data-fragment-index=4></span>
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
+from collections import namedtuple
+
+Point = namedtuple('Point', ['x', 'y', 'z'])
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Since Python 3.5, you've been able to use the `NamedTuple` class from the `typing` module to do the same thing
+          - It has the added benefit of using type hints for your code to document what it does
+          - Outside of those type hints, this is essentially equivalent to the old fashion way of making name tuples
+          - Except that you can also specify default values for your attributes, which can be pretty handy in some cases
+          - although... it doesn't make much sense in this example
+          - *(pause)*
+          - In general named tuples are a great replacement for tuples
+          - But sometimes they're more hassle than they're worth...
+        </aside>
+      </section>
+
+      <section>
+        <h2>named<span class="fragment bold">tuple</span> are tuples</h2>
+        <pre class="python"><code data-trim data-noescape>
+>>> <span class="fragment">p &lt; Point(4, 5, 6)
+True
+>>> </span><span class="fragment">p + Point(4, 5, 6)
+(1, 2, 3, 4, 5, 6)
+>>> </span><span class="fragment">p * 2
+(1, 2, 3, 1, 2, 3)
+>>> </span><span class="fragment">len(p)
+3</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Named tuples inherit from tuples
+          - Which means they inherit all the features that tuples have
+          - So they can be ordered... which can be useful but sometimes it doesn't make sense
+          - They can also be added to each other... and you get a tuple back when you do that
+          - Which is a little weird
+          - And they can be multiplied by integers to make other tuples also... which is also pretty odd
+          - Also they have length... which doesn't necessarily make sense in all cases
+          - So named tuples can be useful, but you sometimes have to be careful while using them
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+from typing import NamedTuple
+
+class Point(NamedTuple):
+    x: float
+    y: float
+    z: float
+    def __lt__(self, other): raise TypeError
+    def __le__(self, other): raise TypeError
+    def __gt__(self, other): raise TypeError
+    def __ge__(self, other): raise TypeError
+    def __add__(self, other): raise TypeError
+    def __mul__(self, other): raise TypeError
+    def __rmul__(self, other): raise TypeError
+    def __len__(self, other): raise TypeError
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - You can fix these problems by overloading the appropriate operators in your named tuple class
+          - But finding and removing features that you don't want is often trickier than adding features that you do want
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h1>attrs</h1>
+        <aside class="notes" data-markdown>
+          - Another solution is to use a third-party library called attrs
+        </aside>
+      </section>
+
+      <section>
+        <pre class="bash fragment"><code data-trim data-noescape>
+$ pip install attrs
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+import attr
+
+@attr.s(auto_attribs=True)
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> <span class="fragment">p
+Point(x=1, y=2, z=3)
+>>> </span><span class="fragment">p == Point(1, 2, 3)
+True
+>>> </span><span class="fragment">p &lt; Point(4, 5, 6)
+True</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - You can get attrs by pip-installing it
+          - After that you can use it by importing attr (without the s, which is a little odd)
+          - That `auto_attribs` argument allows us to use the type hints to define our attributes
+          - By default, `attrs` classes get a nice string representation
+          - And they can be logically compared to other objects of the same type
+          - But they can also be ordered based on those objects, which is a bit odd in this case
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python fragment" data-fragment-index=0><code data-trim data-noescape>
+import attr
+
+@attr.s(auto_attribs=True, <span class="fragment bold-current" data-fragment-index=3>cmp=False</span>, <span class="fragment bold-current" data-fragment-index=1>frozen=True</span>)
+class Point:
+    x: float
+    y: float
+    z: float
+    <span class="fragment bold-current" data-fragment-index=2>def __iter__(self):
+        yield from (self.x, self.y, self.z)</span>
+    <span class="fragment bold-current" data-fragment-index=4>def __eq__(self, other):
+        if not isinstance(other, Point):
+            return NotImplemented
+        return tuple(self) == tuple(other)</span>
+    <span class="fragment bold-current" data-fragment-index=5>def __hash__(self):
+        return hash(tuple(self))</span><span class="fragment" data-fragment-index=10></span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - If we want our `Point` class to work just like the one we made manually before, we could do this
+          - Here we've frozen our object so the attributes can't be modified
+          - We've also added a dunder iter method to make our object work with multiple assignment
+          - And we've disabled comparisons so we don't get automatic ordering, but that means we need to implement a dunder eq method
+          - We also need to implement the dunder hash method ourselves despite the fact that our class is frozen because disabling comparisons also disables hashing by default
+          - So the attrs library is more powerful than named tuples, but it does sometimes take a bit of playing to get it just right
+          - Also it's a third party library which means you'll need to install it whenever you want to use it
+          - There's something similar to `attrs` that's actually bundled with Python
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
+        <h1>dataclasses</h1>
         <ul>
           <li>Available as a third-party library</li>
           <li>Borrows many attrs features but keeps API very simple</li>
@@ -165,12 +493,82 @@
       </section>
 
       <section>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> p
+Point(x=1, y=2, z=3)
+>>> p == Point(1, 2, 3)
+True
+>>> p &lt; Point(4, 5, 6)
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: '&lt;' not supported between instances of 'Point' and 'Point'
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - To use dataclasses, you'll import `dataclass` from the `dataclasses` library
+          - And you'll decorate your class, the same way you can with `attrs`
+          - The syntax relies on type hinting, just like `typing.NamedTuple` and `attrs` do
+          - This `Point` class supports comparisons, has a nice string representation
+          - This `Point` class isn't iterable and isn't immutable
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Point:
+    x: float
+    y: float
+    z: float
+    def __iter__(self):
+        yield from (self.x, self.y, self.z)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass, astuple
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+    def __iter__(self):
+        yield from astuple(self)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      </section>
+
+      <section>
+
+      <section>
         <h3>Data Classes Recipes</h3>
         <ul>
-          <li>Immutability</li>
-          <li>Orderability</li>
-          <li>Iterability</li>
-          <li>Hashability</li>
+          <li>Immutability (Point)</li>
+          <li>Hashability (Point)</li>
+          <li>Iterability (Point)</li>
+          <li>Orderability (Month)</li>
           <li>Inheritance</li>
           <li>Default values</li>
           <li>Extra attributes</li>
@@ -179,6 +577,281 @@
           - TODO outline
           - 4 minutes
         </aside>
+      </section>
+
+      <section>
+        <h2>What you get out of the box</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> p
+Point(x=1, y=2, z=3)
+>>> p == Point(1, 2, 3)
+True
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Immutability?</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> p.x = 8
+>>> p.x
+8
+>>> p
+Point(x=8, y=5, z=3)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Immutability!</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> p.x = 4
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+  File "&lt;string>", line 3, in __setattr__
+dataclasses.FrozenInstanceError: cannot assign to field 'x'
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Hashability!</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> q = Point(4, 5, 6)
+>>> r = Point(1, 2, 3)
+>>> points = {p, q, r}
+>>> points
+{Point(x=4, y=5, z=6), Point(x=1, y=2, z=3)}
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Iterability?</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> x, y, z = p
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: 'Point' object is not iterable
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Iterability!</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+    def __iter__(self):
+        yield from (self.x, self.y, self.z)
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> x, y, z = Point(1, 2, 3)
+>>> (x, y, z)
+(1, 2, 3)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Better Iterability!</h2>
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass, astuple
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+    def __iter__(self):
+        yield from astuple(self)
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> x, y, z = Point(1, 2, 3)
+>>> (x, y, z)
+(1, 2, 3)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Orderability?</h2>
+        <pre class=""><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass
+class Month:
+    year: int
+    month: int
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape style="overflow: hidden;">
+>>> eol_month = Month(2020, 1)
+>>> eol_month
+Month(year=2020, month=1)
+>>> eol_month > Month(2019, 12)
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: '>' not supported between instances of 'Month' and 'Month'
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Orderability!</h2>
+        <pre class=""><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass(order=True)
+class Month:
+    year: int
+    month: int
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> Month(2020, 1) > Month(2019, 12)
+True
+>>> months = [Month(2018, 6), Month(2018, 1), Month(2019, 10)]
+>>> print(*sorted(months), sep='\n')
+Month(year=2018, month=1)
+Month(year=2018, month=6)
+Month(year=2019, month=10)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Summability and other operations?</h2>
+        <pre class=""><code data-trim data-noescape>
+from dataclasses import dataclass, astuple
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> q = Point(4, 5, 6)
+>>> p + q
+Point(x=5, y=7, z=9)
+>>> q - p
+Point(x=3, y=3, z=3)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
+      <section>
+        <h2>Summability and other operations?</h2>
+        <pre class=""><code data-trim data-noescape>
+from dataclasses import dataclass, astuple
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float
+    def __add__(self, other):
+        TODO
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> q = Point(4, 5, 6)
+>>> p + q
+Point(x=5, y=7, z=9)
+>>> q - p
+Point(x=3, y=3, z=3)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - TODO outline
+          - 2 minutes?
+        </aside>
+      </section>
+
       </section>
 
       <section>
