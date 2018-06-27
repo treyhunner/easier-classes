@@ -34,7 +34,7 @@
           <small><a href="http://treyhunner.com" rel="author">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
           </p>
           <aside class="notes" data-markdown>
-            TODO
+            Alright.  Before we jump into this talk, let me quickly introduce myself.
           </aside>
         </section>
 
@@ -480,15 +480,8 @@ class Point:
 
       <section>
         <h1>dataclasses</h1>
-        <ul>
-          <li>Available as a third-party library</li>
-          <li>Borrows many attrs features but keeps API very simple</li>
-          <li>Will be bult-in to the standard library in Python 3.7</li>
-          <li>Some things dataclasses doesn't support that attrs does</li>
-        </ul>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 4 minutes
+          - Data classes are built-in to the Python standard library and they're essentially a simplified version of the `attrs` library
         </aside>
       </section>
 
@@ -502,49 +495,51 @@ class Point:
     y: float
     z: float
         </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> p = Point(1, 2, 3)
->>> p
-Point(x=1, y=2, z=3)
->>> p == Point(1, 2, 3)
+        <pre class="python"><code data-trim data-noescape style="overflow: hidden;">
+>>> <span class="fragment">p = Point(1, 2, 3)
+>>> </span><span class="fragment">p == Point(1, 2, 3)
 True
->>> p &lt; Point(4, 5, 6)
+>>> </span><span class="fragment">p
+Point(x=1, y=2, z=3)
+>>> </span><span class="fragment">p &lt; Point(4, 5, 6)
 Traceback (most recent call last):
   File "&lt;stdin>", line 1, in &lt;module>
-TypeError: '&lt;' not supported between instances of 'Point' and 'Point'
+TypeError: '&lt;' not supported between instances of 'Point' and 'Point'</span>
         </code></pre>
         <aside class="notes" data-markdown>
           - To use dataclasses, you'll import `dataclass` from the `dataclasses` library
           - And you'll decorate your class, the same way you can with `attrs`
           - The syntax relies on type hinting, just like `typing.NamedTuple` and `attrs` do
-          - This `Point` class supports comparisons, has a nice string representation
-          - This `Point` class isn't iterable and isn't immutable
+          - This `Point` class has a nice string representation and supports comparisons
+          - And it doesn't support ordering... just as we'd expect
+          - But this `Point` class isn't iterable and isn't immutable
         </aside>
       </section>
 
-      <section>
+      <section data-transition="none-out" data-transition-speed="default-in fast-out">
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass
 
-@dataclass(frozen=True)
+@dataclass<span class="fragment" data-fragment-index=2>(frozen=True)</span>
 class Point:
     x: float
     y: float
     z: float
-    def __iter__(self):
-        yield from (self.x, self.y, self.z)
+    <span class="fragment" data-fragment-index=1>def __iter__(self):
+        yield from (self.x, self.y, self.z)</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - If we want our `Point` class to be iterable, we can add a dunder iter method
+          - If we want our `Point` class to be immutable, we can set the `frozen` attribute when calling our `dataclass` decorator
+          - There's actually an even better way to implement that dunder iter method
         </aside>
       </section>
 
-      <section>
+      <section data-transition="fade-in" data-transition-speed="fast-in default-out">
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass, astuple
 
-@dataclass
+@dataclass(frozen=True)
 class Point:
     x: float
     y: float
@@ -553,8 +548,23 @@ class Point:
         yield from astuple(self)
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - The `astuple` helper function allows us to get a tuple representation of our object without manually specifying each attribute
+        </aside>
+      </section>
+
+      <section>
+        <h2>dataclasses</h2>
+        <ul>
+          <li class="fragment">Built-in to standard library <span class="fragment">(in Python 3.7)</span></li>
+          <li class="fragment">Available as a third-party library</li>
+          <li class="fragment">dataclasses is simpler, but less feature-rich than attrs</li>
+          <li class="fragment">While attrs supports both Python 2 and Python 3, dataclasses only work on Python 3</li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - When I said before that dataclasses was included with Python, I meant that it's included with Python 3.7
+          - Which isn't released yet, so you're probably not using it
+          - However it is available as a third-party library, so you can pip-install it from any version of Python 3.  If you're on Python 2, you're out of luck.
+          - If you need Python 2 support or if you need more features that dataclasses provide, you might want to reach for attrs instead
         </aside>
       </section>
 
@@ -563,19 +573,9 @@ class Point:
       <section>
 
       <section>
-        <h3>Data Classes Recipes</h3>
-        <ul>
-          <li>Immutability (Point)</li>
-          <li>Hashability (Point)</li>
-          <li>Iterability (Point)</li>
-          <li>Orderability (Month)</li>
-          <li>Inheritance</li>
-          <li>Default values</li>
-          <li>Extra attributes</li>
-        </ul>
+        <h1>Data Classes Recipes</h1>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 4 minutes
+          - Let's take a look at some common uses for data classes
         </aside>
       </section>
 
@@ -598,8 +598,9 @@ Point(x=1, y=2, z=3)
 True
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - Without any other customization, data classes give you:
+            - a good string representation for your object
+            - and they allow you to compare objects to each other with the equality and inequality operators
         </aside>
       </section>
 
@@ -616,15 +617,15 @@ class Point:
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
->>> p.x = 8
->>> p.x
+>>> <span class="fragment">p.x = 8
+>>> </span><span class="fragment">p.x
 8
->>> p
-Point(x=8, y=5, z=3)
+>>> </span><span class="fragment">p
+Point(x=8, y=5, z=3)</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - By default, dataclasses are mutable, meaning that you can change their values
+          - That's often the functionality that's most useful, but if you wanted an immutable class, one that you can't change, you can do that too
         </aside>
       </section>
 
@@ -633,7 +634,7 @@ Point(x=8, y=5, z=3)
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass
 
-@dataclass(frozen=True)
+@dataclass<span class="fragment bold-current">(frozen=True)</span>
 class Point:
     x: float
     y: float
@@ -641,15 +642,15 @@ class Point:
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
->>> p.x = 4
+>>> <span class="fragment">p.x = 4
 Traceback (most recent call last):
   File "&lt;stdin>", line 1, in &lt;module>
   File "&lt;string>", line 3, in __setattr__
-dataclasses.FrozenInstanceError: cannot assign to field 'x'
+dataclasses.FrozenInstanceError: cannot assign to field 'x'</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - As we've already seen, the `frozen` argument can be passed to the `dataclass` decorator to make our data classes immutable
+          - This will make it so we can't assign to any of the attributes in our class after it's been constructed
         </aside>
       </section>
 
@@ -668,13 +669,14 @@ class Point:
 >>> p = Point(1, 2, 3)
 >>> q = Point(4, 5, 6)
 >>> r = Point(1, 2, 3)
->>> points = {p, q, r}
->>> points
-{Point(x=4, y=5, z=6), Point(x=1, y=2, z=3)}
+>>> <span class="fragment">points = {p, q, r}
+>>> </span><span class="fragment">points
+{Point(x=4, y=5, z=6), Point(x=1, y=2, z=3)}</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - As an added bonus, frozen dataclasses are also hashable by default
+          - Meaning we can use our objects in sets and as dictionary keys
+          - Normally dataclasses aren't hashable because it's usually a bad idea to allow mutable objects to be hashable
         </aside>
       </section>
 
@@ -691,14 +693,14 @@ class Point:
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
->>> x, y, z = p
+>>> <span class="fragment">x, y, z = p
 Traceback (most recent call last):
   File "&lt;stdin>", line 1, in &lt;module>
-TypeError: 'Point' object is not iterable
+TypeError: 'Point' object is not iterable</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - By default, you can't unpack a dataclass
+          - If we want to use multiple assignment with dataclasses, we'll need to implement our own dunder iter method
         </aside>
       </section>
 
@@ -713,16 +715,16 @@ class Point:
     y: float
     z: float
     def __iter__(self):
-        yield from (self.x, self.y, self.z)
+        yield self.x
+        yield self.y
+        yield self.z
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
 >>> x, y, z = Point(1, 2, 3)
->>> (x, y, z)
-(1, 2, 3)
-        </code></pre>
+</code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - As we've already seen, we can do that manually by yielding x, y, and z individually
+          - The dataclasses library also includes helpers to make looping over our fields easier
         </aside>
       </section>
 
@@ -745,8 +747,8 @@ class Point:
 (1, 2, 3)
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - The `astuple` function accepts a dataclass and returns a tuple of its attribute values, in order
+          - So we yield items from this tuple instead of writing each attribute out manually
         </aside>
       </section>
 
@@ -764,14 +766,15 @@ class Month:
 >>> eol_month = Month(2020, 1)
 >>> eol_month
 Month(year=2020, month=1)
->>> eol_month > Month(2019, 12)
-Traceback (most recent call last):
+>>> <span class="fragment">eol_month > Month(2019, 12)</span>
+<span class="fragment">Traceback (most recent call last):
   File "&lt;stdin>", line 1, in &lt;module>
-TypeError: '>' not supported between instances of 'Month' and 'Month'
+TypeError: '>' not supported between instances of 'Month' and 'Month'</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - What if we want our objects to be orderable using the less than and greater than operators?
+          - By default, we can only check for equality and inequality on our classes
+          - They don't support ordering automatically
         </aside>
       </section>
 
@@ -780,7 +783,7 @@ TypeError: '>' not supported between instances of 'Month' and 'Month'
         <pre class=""><code data-trim data-noescape>
 from dataclasses import dataclass
 
-@dataclass(order=True)
+@dataclass<span class="fragment bold-current">(order=True)</span>
 class Month:
     year: int
     month: int
@@ -789,82 +792,94 @@ class Month:
 >>> Month(2020, 1) > Month(2019, 12)
 True
 >>> months = [Month(2018, 6), Month(2018, 1), Month(2019, 10)]
->>> print(*sorted(months), sep='\n')
+>>> <span class="fragment">print(*sorted(months), sep='\n')
 Month(year=2018, month=1)
 Month(year=2018, month=6)
-Month(year=2019, month=10)
+Month(year=2019, month=10)</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - But if we do want to support ordering, we can pass the `order` argument to the `dataclass` decorator when we make our class
+          - Our class will be ordered lexicographically, the same way tuples, lists, and strings are ordered in Python
         </aside>
       </section>
 
       <section>
         <h2>Summability and other operations?</h2>
-        <pre class=""><code data-trim data-noescape>
+        <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass, astuple
 
 @dataclass
-class Point:
+class Vector:
     x: float
     y: float
     z: float
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
->>> p = Point(1, 2, 3)
->>> q = Point(4, 5, 6)
->>> p + q
-Point(x=5, y=7, z=9)
->>> q - p
-Point(x=3, y=3, z=3)
-        </code></pre>
+>>> p = Vector(1, 2, 3)
+>>> q = Vector(4, 5, 6)
+>>> <span class="fragment">p + q
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: unsupported operand type(s) for +: 'Vector' and 'Vector'
+>>> <span><span class="fragment">q - p
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: unsupported operand type(s) for +: 'Vector' and 'Vector'</span></code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - What if you want other operations on your objects?
+          - By default, dataclasses don't support the `+` operator and they don't support the `-` operator
+          - If you want your classes to work with these operators, you'll have to implement that suppot yourself
         </aside>
       </section>
 
       <section>
-        <h2>Summability and other operations?</h2>
-        <pre class=""><code data-trim data-noescape>
+        <h2>Summability and other operations!</h2>
+        <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass, astuple
 
 @dataclass
-class Point:
+class Vector:
     x: float
     y: float
     z: float
+    def __iter__(self):
+        yield from astuple(self)
     def __add__(self, other):
-        TODO
-        </code></pre>
+        return Vector(*(a + b for a, b in zip(self, other)))
+    def __sub__(self, other):
+        return Vector(*(a - b for a, b in zip(self, other)))        </code></pre>
         <pre class="python"><code data-trim data-noescape>
->>> p = Point(1, 2, 3)
->>> q = Point(4, 5, 6)
->>> p + q
-Point(x=5, y=7, z=9)
->>> q - p
-Point(x=3, y=3, z=3)
+>>> <span class="fragment">Vector(1, 2, 3) + Vector(4, 5, 6)
+Vector(x=5, y=7, z=9)
+>>> </span><span class="fragment">Vector(4, 5, 6) - Vector(1, 2, 3)
+Vector(x=3, y=3, z=3)</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes?
+          - But if you make your classes iterable, it's not that hard
+          - Here we've implemented dunder add and dunder sub methods for addition and subtraction
+          - Instead of manually adding x, y, and z coordinates, we're delegating work to our dunder iter method, which is in turn delegating work to the `astuple` helper function
         </aside>
       </section>
 
       </section>
 
       <section>
-        <h3>Takeaways</h3>
+        <h2>When making classes, consider...</h2>
         <ul>
-          <li>You don't always need custom classes for your data, but it can be very handy</li>
-          <li>Your commonly used classes should feel Pythonic</li>
-          <li>You don't want lots of boilerplate in your classes</li>
-          <li>Use dataclasses or attrs when you need custom data-heavy classes</li>
+          <li class="fragment">You don't always need custom classes for your data <nobr class="fragment">(see Jack Diederich's <a href="https://www.youtube.com/watch?v=o9pEzgHorH0">Stop Writing Classes</a>)</nobr></li>
+          <li class="fragment">Custom can make things very handy, but they can be a step down unless you make them friendly to use</li>
+          <li class="fragment">Friendly classes can require a lot of boilerplate code</li>
+          <li class="fragment">To avoid distracting boilerplate code, use <code>dataclasses</code> <span class="fragment">or <code>attrs</code> for creating custom data-heavy classes</span></li>
         </ul>
         <aside class="notes" data-markdown>
-          - TODO outline
-          - 2 minutes
+          - When you're about to create a class in Python, I'd like you to consider
+          - That you probably don't need a class
+          - There's a talk called Stop Writing Classes that I'd highly recommend watching if you haven't seen it before
+          - If you do decide you need a class, you should make it a friendly one.  Using your class should feel almost as natural as using one of the Python built-in data types
+          - Creating a friendly class involves writing a lot of boilerplate code
+          - But the dataclasses library can help with this
+          - If you're on Python 3.7, it comes bundled with Python. If you're on an earlier version of Python 3, you can pip-install it.
+          - And if dataclasses isn't enough for you, or if you need Python 2 support, there's always the attrs library
         </aside>
       </section>
 
