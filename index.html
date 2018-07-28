@@ -65,18 +65,21 @@
         </ul>
         <aside class="notes" data-markdown>
           - I'd like to talk about making classes that are easy for developers to use
-          - I'm tempted to use the phrase Pythonic classes to describe this idea, but that word Pythonic is a bit loaded, so I'm going to instead say that we're making **friendly** classes
+          - I'm tempted to use the phrase Pythonic classes to describe this idea, but that word Pythonic is a bit loaded, so I'm going to instead say that we're making **friendly** classes **(click)**
           - Friendly classes are friendly for the developers who use them
-          - They have a nice string representation
-          - They can be compared to each other in ways that make sense
-          - And whenever it makes, they overload operators to allow themselves to be addable, iterable, hashable on so on
+          - Friendly classes **(click)** have a nice string representation
+          - They **(click)** can be compared to each other in ways that make sense
+          - And whenever it makes, they **(click)** overload operators to allow themselves to be addable, iterable, hashable on so on
         </aside>
       </section>
 
       <section>
 
       <section>
-        <h1>Example: a Month class</h1>
+        <h1>Case 1: Month class</h1>
+        <aside class="notes" data-markdown>
+          Let's take a look at an example of a friendly class.
+        </aside>
       </section>
 
       <section>
@@ -118,11 +121,11 @@ True</span>
         </code></pre>
         </div>
         <aside class="notes" data-markdown>
-          - If you want a class in Python that accepts attributes, you'll probably want an initializer
-          - If you want it to have a helpful string representation, you'll also want a dunder repr method
-          - But what if you also wanted your classes to be comparable to other classes?... using equality and inequality?
-          - In that case you'll want a dunder eq method.
-          - If you wanted to go further, by allowing your classes to be sortable, you'll need to implement the less than operator with dunder lt, the greater than operator with dunder gt, the less than or equal to operator with dunder le, and the greater than or equal to operator with dunder ge
+          - If you want a class in Python that **(click)** accepts attributes, you'll probably want **(click)** an initializer
+          - If you want it to have **(click)** a helpful string representation, you'll also want **(click)** a dunder repr method
+          - But what if you also wanted your classes to be **(click)** comparable to other classes?... using **(click)** equality and **(click)** inequality?
+          - In that case you'll want **(click)** a dunder eq method.
+          - If you wanted to go further, by allowing your classes to be **(click)** sortable, you'll need to implement **(click)** the less than operator with **(click)** dunder lt, **(click)** the greater than operator with **(click)** dunder gt, the **(click)** less than or equal to operator with **(click)** dunder le, and **(click)** the greater than or equal to operator with **(click)** dunder ge
           - After all this, our class is going to look pretty big
         </aside>
       </section>
@@ -157,8 +160,8 @@ class Month:
         </code></pre>
         <aside class="notes" data-markdown>
           - You might notice there's a lot of code duplication here
-          - All five of those comparison dunder methods are pretty much the same method
-          - The only real difference is the operator they use
+          - All five of those **(click)** comparison dunder methods are pretty much the same method
+          - The only real difference is **(click)** the operator they use
           - There is a helper in the standard library to make this class a bit shorter
         </aside>
       </section>
@@ -186,7 +189,9 @@ class Month:
         <aside class="notes" data-markdown>
           - It's called `total_ordering` and it lives in the `functools` module
           - It allows us to implement just 2 comparison operators and it'll implement the others automatically
+          - Here we're implementing equality with `__eq__` and less than with `__lt_`
           - But there's still a lot of boilerplate code needed for this class
+          - We're going to take a look at an even better way to make this class later, but first we're going to take a look at another example
         </aside>
       </section>
 
@@ -195,11 +200,15 @@ class Month:
       <section>
 
       <section>
-        <h1>Example: a Point class</h1>
+        <h1>Case 2: Point class</h1>
+        <aside class="notes" data-markdown>
+          - Let's take a look at one more example
+          - This time we're going to look at a class that represents a three-dimensional point
+        </aside>
       </section>
 
       <section>
-        <h2><span class="fragment" data-fragment-index=5>Iterability</span> <span class="fragment" data-fragment-index=7>and Immutability</span></h2>
+        <h2><span class="fragment" data-fragment-index=6>Iterability</span> <span class="fragment" data-fragment-index=8>and Immutability</span></h2>
         <div class="container">
         <pre class="col python"><code data-trim data-noescape>
 >>> <span class="fragment" data-fragment-index=1>p = Point(1, 2, 3)
@@ -208,12 +217,14 @@ Point(x=1, y=2, z=3)
 >>> </span><span class="fragment" data-fragment-index=3>p == Point(1, 2, 3)
 True
 >>> </span><span class="fragment" data-fragment-index=4>x, y, z = p
->>> </span><span class="fragment" data-fragment-index=8>p.x = 4
+>>> </span><span class="fragment" data-fragment-index=5>x
+1
+>>> </span><span class="fragment" data-fragment-index=9>p.x = 4
 Traceback (most recent call last):
   File "&lt;stdin>", line 1
   File "&lt;string>", line 3
 AttributeError: object is immutable
->>> </span><span class="fragment" data-fragment-index=12>{Point(1, 2, 3), Point(1, 2, 3)}
+>>> </span><span class="fragment" data-fragment-index=13>{Point(1, 2, 3), Point(1, 2, 3)}
 {Point(x=1, y=2, z=3)}</span>
         </code></pre>
         <pre class="col python"><code data-trim data-noescape>
@@ -224,23 +235,27 @@ AttributeError: object is immutable
         pass</span>
     <span class="fragment" data-fragment-index=3>def __eq__(self, other):
         pass</span>
-    <span class="fragment" data-fragment-index=6>def __iter__(self):
+    <span class="fragment" data-fragment-index=7>def __iter__(self):
         pass</span>
-    <span class="fragment" data-fragment-index=9>def __setattr__(self, name, value):
+    <span class="fragment" data-fragment-index=10>def __setattr__(self, name, value):
         pass</span>
-    <span class="fragment" data-fragment-index=13>def __hash__(self):
-        pass</span>
+    <span class="fragment" data-fragment-index=14>def __hash__(self):
+        pass
+
+        </span>
         </code></pre>
         </div>
         <aside class="notes" data-markdown>
-          - Just as in our last example, we're going to want our class to accept arguments, have a nice string representation, and allow itself to be compared to other `Point` objects
-          - But what if we also want to allow our class to be unpacked into three coordinate variables using multiple assignment?
-          - Multiple assignment requires that our class be iterable
-          - We'll need a dunder iter method for that
-          - We might also want our class to be immutable, meaning we can't override any of the attributes after we've created a `Point` object
-          - For this we need to make a custom dunder setattr method
-          - And if our class is immutable it should be safe to use it in dictionary keys and sets
-          - But we'll need a dunder hash method for that
+          - Just as in our last example, we're going to want our class to **(click)** accept arguments, **(click)** have a nice string representation, and **(click)** allow itself to be compared to other `Point` objects
+          - But what if we also want to allow our class **(click)** to be unpacked into three coordinate variables using multiple assignment?
+          - Meaning we can take our point and **(click)** unpack it into `x`, `y`, and `z` values
+          - Multiple assignment requires that our class **(click)** be iterable
+          - We'll need a **(click)** dunder iter method for that
+          - *(pause)*
+          - We might also want our class to be **(click)** immutable, meaning **(click)** we can't override any of the attributes after we've created a `Point` object
+          - For this we need to make a **(click)** custom dunder setattr method, which is a bit of an advanced thing to do but it works
+          - And if our class is immutable it should be **(click)** safe to use it in dictionary keys and sets
+          - But we'll need **(click)** a dunder hash method for that
           - So after all of this work, our `Point` class ends up looking something like this...
         </aside>
       </section>
@@ -266,8 +281,11 @@ class Point:
         </code></pre>
         <aside class="notes" data-markdown>
           - This class does quite a bit without too many lines of code
-          - But most of this code is pretty standard and is basically boilerplate code
-          - And we can actually get all of this functionality for free...
+          - Some of this is probably new to you
+          - If you haven't seen `yield` before, you can google generators and iterators and how to make them on your own
+          - This is basically copy-paste code time here.  Instead of memorizing all this, we can always copy-paste this class format when we need it.
+          - So while a lot of these things might be *new* to you, this code is pretty succinct for how much it does. But this is pretty much all boilerplate code.  We shouldn't have to type this out, or copy-paste it whenever we need code that works this way.
+          - Fortunately, there is a tool in the Python standard library that can use to help us
         </aside>
       </section>
 
@@ -278,86 +296,88 @@ class Point:
       <section>
         <h1>namedtuple</h1>
         <aside class="notes" data-markdown>
-          - By using the `namedtuple` helper function from the Python standard library
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python fragment"><code data-trim data-noescape>
-from collections import namedtuple
-
-<span class="fragment">Point = namedtuple('Point', ['x', 'y', 'z'])</span>
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> p = Point(1, 2, 3)
->>> <span class="fragment">p
-Point(x=1, y=2, z=3)
->>> </span><span class="fragment">p == Point(1, 2, 3)
-True
->>> </span><span class="fragment">p.x = 4
-Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-AttributeError: cannot set attribute
->>> </span><span class="fragment">{p, p}
-{Point(x=1, y=2, z=3)}</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - The `namedtuple` function lives in the `collections` module
-          - `namedtuple` isn't a class so much as a factory function that creates new classes
-          - When you call `namedtuple`, you pass it in the name of the class and the attributes the class should have, and it'll dynamically create a new class for you
-          - The classes created by `namedtuple` have a friendly string representation
-          - They can be compared to each other
-          - And they're immutable, and hashable, just like tuples
-          - If you find it unintuitive that calling `namedtuple` gives you a class back, you can use a nicer syntax for creating named tuples...
+          - It's a helper function called `namedtuple` and it's in both Python 2 and Python 3
         </aside>
       </section>
 
       <section>
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+from collections import namedtuple
+
+<span class="fragment" data-fragment-index=2>Point = <span class="fragment bold" data-fragment-index=10>namedtuple('Point', ['x', 'y', 'z'])</span></span>
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=3><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> <span class="fragment" data-fragment-index=4>p
+Point(x=1, y=2, z=3)
+>>> </span><span class="fragment" data-fragment-index=5>p == Point(1, 2, 3)
+True
+>>> </span><span class="fragment" data-fragment-index=6>p.x = 4
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+AttributeError: cannot set attribute
+>>> </span><span class="fragment" data-fragment-index=7>{Point(1, 2, 3), Point(1, 2, 3)}
+{Point(x=1, y=2, z=3)}</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - The **(click)** `namedtuple` function lives in the `collections` module
+          - `namedtuple` isn't a class so much as a factory function that creates new classes
+          - When you call `namedtuple`, you pass **(click)** in the name of the class and the attributes the class should have, and it'll dynamically create a new class for you
+          - The **(click)** classes created by `namedtuple` have **(click)** a friendly string representation
+          - **(click)** They can be compared to each other
+          - And **(click)** they're immutable, and **(click)** hashable, just like tuples
+          - So out-of-the-box, `namedtuple` pretty much gives us all the things we were looking for in our `Point` class
+          - The **(click)** way we call `namedtuple` might seem a little unintuitive though
+          - As of Python 3.5, there's an even better way to use `namedtuple`
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
 from typing import NamedTuple
 
-class Point(NamedTuple):
-    x: float <span class="fragment current-visible" data-fragment-index=3>= 0</span>
-    y: float <span class="fragment current-visible" data-fragment-index=3>= 0</span>
-    z: float <span class="fragment current-visible" data-fragment-index=3>= 0</span><span class="fragment" data-fragment-index=4></span>
+<span class="fragment" data-fragment-index=1><span class="fragment bold-current" data-fragment-index=4>class Point(NamedTuple)</span>:
+    <span class="fragment bold-current" data-fragment-index=5>x: float <span class="fragment current-visible" data-fragment-index=6>= 0</span>
+    y: float <span class="fragment current-visible" data-fragment-index=6>= 0</span>
+    z: float <span class="fragment current-visible" data-fragment-index=6>= 0</span><span class="fragment" data-fragment-index=7></span></span></span>
         </code></pre>
         <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
 from collections import namedtuple
 
-Point = namedtuple('Point', ['x', 'y', 'z'])
+Point = <span class="fragment bold-current" data-fragment-index=3>namedtuple('Point', ['x', 'y', 'z'])</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - Since Python 3.5, you've been able to use the `NamedTuple` class from the `typing` module to do the same thing
-          - It has the added benefit of using type hints for your code to document what it does
-          - Outside of those type hints, this is essentially equivalent to the old fashion way of making name tuples
-          - Except that you can also specify default values for your attributes, which can be pretty handy in some cases
-          - although... it doesn't make much sense in this example
+          - Instead of using `collections.namedtuple`, you can now **(click)** inherit from the `typing.NamedTuple` class which does the same thing
+          - So while **(click)** `collections.namedtuple` is a **(click)** function that creates a class for you, **(click)** `typing.NamedTuple` is actually a class that you can inherit from
+          - This `NamedTuple` class gives you pretty much the same thing as the `namedtuple` function except that we use type hints to make define its attributes
+          - And you can specify default values for your attributes, which can be pretty handy in some cases
+          - Though it probably doesn't make much sense in this example **(click)** 
           - *(pause)*
-          - In general named tuples are a great replacement for tuples
-          - But sometimes they're more hassle than they're worth...
+          - In general named tuples are a pretty great way to get something a bit more descriptive than the built-in tuple type
+          - But if you're using named tuples to replace a class that doesn't need to work like a tuple, you might want to think twice.  Let me explain why.
         </aside>
       </section>
 
       <section>
         <h2>named<span class="fragment bold">tuple</span> are tuples</h2>
         <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment">p &lt; Point(4, 5, 6)
+>>> <span class="fragment">Point(1, 2, 3) &lt; Point(4, 5, 6)
 True
->>> </span><span class="fragment">p + Point(4, 5, 6)
+>>> </span><span class="fragment">Point(1, 2, 3) + Point(4, 5, 6)</span><span class="fragment">
 (1, 2, 3, 4, 5, 6)
->>> </span><span class="fragment">p * 2
+>>> </span><span class="fragment">Point(1, 2, 3) * 2</span><span class="fragment">
 (1, 2, 3, 1, 2, 3)
->>> </span><span class="fragment">len(p)
+>>> </span><span class="fragment">len(Point(1, 2, 3))
 3</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - Named tuples inherit from tuples
+          - Named tuples inherit from tuples **(click)**
           - Which means they inherit all the features that tuples have
-          - So they can be ordered... which can be useful but sometimes it doesn't make sense
-          - They can also be added to each other... and you get a tuple back when you do that
-          - Which is a little weird
-          - And they can be multiplied by integers to make other tuples also... which is also pretty odd
-          - Also they have length... which doesn't necessarily make sense in all cases
+          - So they can be **(click)** ordered... which can be useful but sometimes it doesn't make sense, like in this case for example
+          - They can also be **(click)** added to each other... but the tuple returned from this **(click)** might not be what you'd expect
+          - The same is true for multiplication **(click)**
+          - You can multiply namedtuples by integers, but the **(click)** thing you get back is a little odd
+          - Also they have **(click)** a length... which also doesn't necessarily make sense in all cases
           - So named tuples can be useful, but you sometimes have to be careful while using them
         </aside>
       </section>
@@ -380,8 +400,9 @@ class Point(NamedTuple):
     def __len__(self, other): raise TypeError
         </code></pre>
         <aside class="notes" data-markdown>
-          - You can fix these problems by overloading the appropriate operators in your named tuple class
+          - You can fix these problems by overloading the appropriate operators in your named tuple class so that they all raise exceptions
           - But finding and removing features that you don't want is often trickier than adding features that you do want
+          - If these features of named tuples are inappropriate for your use case, you probably shouldn't use them
         </aside>
       </section>
 
@@ -392,7 +413,8 @@ class Point(NamedTuple):
       <section>
         <h1>attrs</h1>
         <aside class="notes" data-markdown>
-          - Another solution is to use a third-party library called attrs
+          - One alternative to named tuples is `attrs`
+          - `attrs` is a third-party library that makes it easier to create classes with certain common features
         </aside>
       </section>
 
@@ -401,13 +423,13 @@ class Point(NamedTuple):
 $ pip install attrs
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
-import attr
+<span class="fragment bold-current">import attr</span>
 
-@attr.s(auto_attribs=True)
+<span class="fragment bold-current">@attr.s(auto_attribs=True)</span>
 class Point:
     x: float
     y: float
-    z: float
+    z: float<span class="fragment"></span>
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
@@ -419,17 +441,19 @@ True
 True</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - You can get attrs by pip-installing it
-          - After that you can use it by importing attr (without the s, which is a little odd)
-          - That `auto_attribs` argument allows us to use the type hints to define our attributes
-          - By default, `attrs` classes get a nice string representation
-          - And they can be logically compared to other objects of the same type
-          - But they can also be ordered based on those objects, which is a bit odd in this case
+          - You can get attrs by **(click)** pip-installing it
+          - **(click)** After that you can use it by **(click)** importing attr (without the s, which is a little odd)
+          - And then **(click)** decorating your class with the `attr.s` decorator
+          - That `auto_attribs` argument allows us to use **(click)** type hints to define our attributes
+          - By default, **(click)** `attrs` classes get **(click)** a nice string representation
+          - And **(click)** they can be logically compared to other objects of the same type
+          - But **(click)** they can also be ordered the same way named tuples can, which again is a bit odd in this case
+          - If we want our `Point` class to work just like the one we made manually before, we could do this
         </aside>
       </section>
 
       <section>
-        <pre class="python fragment" data-fragment-index=0><code data-trim data-noescape>
+        <pre class="python"><code data-trim data-noescape>
 import attr
 
 @attr.s(auto_attribs=True, <span class="fragment bold-current" data-fragment-index=3>cmp=False</span>, <span class="fragment bold-current" data-fragment-index=1>frozen=True</span>)
@@ -447,14 +471,14 @@ class Point:
         return hash(tuple(self))</span><span class="fragment" data-fragment-index=10></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - If we want our `Point` class to work just like the one we made manually before, we could do this
-          - Here we've frozen our object so the attributes can't be modified
-          - We've also added a dunder iter method to make our object work with multiple assignment
-          - And we've disabled comparisons so we don't get automatic ordering, but that means we need to implement a dunder eq method
-          - We also need to implement the dunder hash method ourselves despite the fact that our class is frozen because disabling comparisons also disables hashing by default
+          - Here we've **(click)** frozen our object so the attributes can't be modified
+          - We've also added **(click)** a dunder iter method to make our object work with multiple assignment
+          - And we've **(click)** disabled comparisons so we don't get automatic ordering, but that means we need to implement **(click)** a dunder eq method
+          - We also need to implement **(click)** a dunder hash method ourselves
+          - Normally we would get that for free with frozen classes, but disabling comparisons also disables hashing by default **(click)**
           - So the attrs library is more powerful than named tuples, but it does sometimes take a bit of playing to get it just right
           - Also it's a third party library which means you'll need to install it whenever you want to use it
-          - There's something similar to `attrs` that's actually bundled with Python
+          - There's something similar to `attrs` that's actually bundled with Python though
         </aside>
       </section>
 
@@ -465,11 +489,42 @@ class Point:
       <section>
         <h1>dataclasses</h1>
         <aside class="notes" data-markdown>
-          - Data classes are built-in to the Python standard library and they're essentially a simplified version of the `attrs` library
+          - Data classes is essentially a simplified version of the `attrs` library that's built-in to the Python standard library
         </aside>
       </section>
 
-      <section>
+      <section data-transition="none-out" data-transition-speed="default-in fast-out">
+        <pre class="python"><code data-trim data-noescape>
+<span class="fragment bold-current">from dataclasses import dataclass</span>
+
+<span class="fragment bold-current">@dataclass</span>
+class Point:
+    <span class="fragment bold-current">x: float</span>
+    y: float
+    z: float
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape style="overflow: hidden;">
+>>> <span class="fragment">p = Point(1, 2, 3)
+>>> </span><span class="fragment">p
+Point(x=1, y=2, z=3)
+>>> </span><span class="fragment">p == Point(1, 2, 3)
+True
+>>> </span><span class="fragment">p &lt; Point(4, 5, 6)
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+TypeError: '&lt;' not supported between instances of 'Point' and 'Point'</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - To use dataclasses, you'll **(click)** import `dataclass` from the `dataclasses` library
+          - And you'll **(click)** decorate your class, the same way you can with `attrs`
+          - The syntax relies on **(click)** type hinting, just like `typing.NamedTuple` and `attrs` do
+          - This **(click)** `Point` class has **(click)** a nice string representation and **(click)** it supports comparisons
+          - But **(click)** it doesn't support ordering... and that's perfect because we don't want our class to orderable
+          - But this `Point` class doesn't work quite the way we want it to yet
+        </aside>
+      </section>
+
+      <section data-transition="none-in none-out" data-transition-speed="fast-in default-out">
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass
 
@@ -480,23 +535,23 @@ class Point:
     z: float
         </code></pre>
         <pre class="python"><code data-trim data-noescape style="overflow: hidden;">
->>> <span class="fragment">p = Point(1, 2, 3)
->>> </span><span class="fragment">p == Point(1, 2, 3)
-True
->>> </span><span class="fragment">p
-Point(x=1, y=2, z=3)
->>> </span><span class="fragment">p &lt; Point(4, 5, 6)
-Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-TypeError: '&lt;' not supported between instances of 'Point' and 'Point'</span>
+>>> p = Point(1, 2, 3)
+>>> <span class="fragment">x, y, z = p
+</span><span class="fragment">Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: cannot unpack non-iterable Point object
+>>> </span><span class="fragment">p.x = 4</span><span class="fragment">
+>>> p
+Point(x=4, y=2, z=3)
+
+</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - To use dataclasses, you'll import `dataclass` from the `dataclasses` library
-          - And you'll decorate your class, the same way you can with `attrs`
-          - The syntax relies on type hinting, just like `typing.NamedTuple` and `attrs` do
-          - This `Point` class has a nice string representation and supports comparisons
-          - And it doesn't support ordering... just as we'd expect
-          - But this `Point` class isn't iterable and isn't immutable
+          - If we try to use this point with multiple assignment **(click)**, we'll get an error **(click)**, because our `Point` class is not iterable so we can't unpack into 3 variables
+          - Also if we **(click)** try to assign to the `x` attribute in our class
+          - It **(click)** works... which isn't good because our class is *supposed to be* **immutable**, meaning we shouldn't be able to change the attributes in our `Point` objects
+          - We're expecting to get an error here instead
+          - So we need to make our `Point` class iterable and immutable
         </aside>
       </section>
 
@@ -504,22 +559,53 @@ TypeError: '&lt;' not supported between instances of 'Point' and 'Point'</span>
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass
 
-@dataclass<span class="fragment" data-fragment-index=2>(frozen=True)</span>
+@dataclass
 class Point:
     x: float
     y: float
     z: float
-    <span class="fragment" data-fragment-index=1>def __iter__(self):
-        yield from (self.x, self.y, self.z)</span>
+    <span class="fragment">def __iter__(self):
+        yield from <span class="fragment bold-current">(self.x, self.y, self.z)</span></span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - If we want our `Point` class to be iterable, we can add a dunder iter method
-          - If we want our `Point` class to be immutable, we can set the `frozen` attribute when calling our `dataclass` decorator
-          - There's actually an even better way to implement that dunder iter method
+          - To make our class iterable, we can add **(click)** a dunder iter method
+          - Which you could copy-paste from the Point class that we made manually earlier, before we looked at namedtuples and attrs and dataclasses
+          - But instead of hard-coding **(click)** self.x, self.y, and self.z, you could instead copy-paste this code
+          - *(pause)*
         </aside>
       </section>
 
-      <section data-transition="fade-in" data-transition-speed="fast-in default-out">
+      <section data-transition="none-in none-out" data-transition-speed="fast-in fast-out">
+        <pre class="python"><code data-trim data-noescape>
+from dataclasses import dataclass, astuple
+
+@dataclass<span class="fragment" data-fragment-index=4><strong>(frozen=True)</strong></span>
+class Point:
+    x: float
+    y: float
+    z: float
+    def __iter__(self):
+        yield from astuple(self)
+        </code></pre>
+        <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> <span class="fragment" data-fragment-index=2>x, y, z = p
+>>> </span><span class="fragment" data-fragment-index=3>x
+1
+>>> y
+2</span></code></pre>
+
+        <aside class="notes" data-markdown>
+          - The `dataclasses` library has an `astuple` helper that allows us to get a tuple that contains our object's attributes without manually specifying each of the attributes.  Which is kind of nifty.
+          - *(pause)*
+          - So our **(click)** `Point` class is iterable now, meaning we can use **(click)** multiple assignment with it
+          - Which is great **(click)**
+          - But it's not immutable yet
+          - To make it immutable, we can set the **(click)** `frozen` attribute when using our `dataclass` decorator
+        </aside>
+      </section>
+
+      <section data-transition="none-out" data-transition-speed="fast-in default-out">
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass, astuple
 
@@ -531,10 +617,24 @@ class Point:
     def __iter__(self):
         yield from astuple(self)
         </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> p = Point(1, 2, 3)
+>>> <span class="fragment" data-fragment-index=5>p.x = 4</span><span class="fragment">
+Traceback (most recent call last):
+  File "&lt;stdin>", line 1, in &lt;module>
+  File "&lt;string>", line 3, in __setattr__
+dataclasses.FrozenInstanceError: cannot assign to field 'x'</span>
+        </code></pre>
+
         <aside class="notes" data-markdown>
-          - The `astuple` helper function allows us to get a tuple representation of our object without manually specifying each attribute
+          - Now that we've frozen our `Point` class, if we **(click)** try to assign an attribute on a point object, **(click)**, we'll get an error
+          - Which is just what we're looking for
+          - So our class is now iterable, immutable, comparable, and it has a nice representation.  But it's *not* orderable, it *doesn't have a length, and it *doesn't* have other features that don't make sense either
+          - So using dataclasses, we've made a **friendly class** that has just the features that we want
+          - All in less than 10 lines of code.  I think this is pretty cool.
         </aside>
       </section>
+
 
       <section>
         <h2>dataclasses</h2>
@@ -545,10 +645,11 @@ class Point:
           <li class="fragment">While attrs supports both Python 2 and Python 3, dataclasses only work on Python 3</li>
         </ul>
         <aside class="notes" data-markdown>
-          - When I said before that dataclasses was included with Python, I meant that it's included with Python 3.7
-          - Which isn't released yet, so you're probably not using it
-          - However it is available as a third-party library, so you can pip-install it from any version of Python 3.  If you're on Python 2, you're out of luck.
-          - If you need Python 2 support or if you need more features that dataclasses provide, you might want to reach for attrs instead
+          - When I told you before that dataclasses are **(click)** included in the Python standard library, I meant that **(click)** it's included with Python 3.7
+          - Which was just released pretty recently, so you're probably not using it yet
+          - It's also **(click)** available as a third-party library though, so you can pip-install it from any version of Python 3.  If you're on Python 2, you're out of luck.
+          - If you need Python 2 support **(click)** or if you need **(click)** more features than dataclasses provide, you might want to reach for the `attrs` library instead
+          - The dataclasses library was partially inspired attrs, so many of the design decisions made by each are similar
         </aside>
       </section>
 
