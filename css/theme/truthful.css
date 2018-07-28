@@ -283,21 +283,21 @@ section.has-dark-background a:hover {
 .reveal .aboutme-card {
 
   display: inline-block;
-  padding: 20px;
-  width: 200px;
+  padding: 50px;
+  width: 300px;
   padding-top: 0;
 }
 
 .reveal .aboutme-card span {
   display: inline-block;
   font-size: 18px;
-  padding-top: 20px;
+  padding-top: 30px;
 }
 
 .reveal .aboutme-logos {
   margin: auto;
   display: block;
-  height: 200px;
+  height: 300px;
 }
 
 /*********************************************
