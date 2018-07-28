@@ -122,10 +122,11 @@ True</span>
         </div>
         <aside class="notes" data-markdown>
           - If you want a class in Python that **(click)** accepts attributes, you'll probably want **(click)** an initializer
-          - If you want it to have **(click)** a helpful string representation, you'll also want **(click)** a dunder repr method
+          - If you want it to have **(click)** a helpful string representation, you'll also want **(click)** a **dunder repr** method
+          - Dunder, by the way, stands for double underscore and dunder methods are special methods that provide a contract between us and Python
           - But what if you also wanted your classes to be **(click)** comparable to other classes?... using **(click)** equality and **(click)** inequality?
-          - In that case you'll want **(click)** a dunder eq method.
-          - If you wanted to go further, by allowing your classes to be **(click)** sortable, you'll need to implement **(click)** the less than operator with **(click)** dunder lt, **(click)** the greater than operator with **(click)** dunder gt, the **(click)** less than or equal to operator with **(click)** dunder le, and **(click)** the greater than or equal to operator with **(click)** dunder ge
+          - In that case you'll want **(click)** a **dunder eq** method.
+          - If you wanted to go further, by allowing your classes to be **(click)** sortable, you'll need to implement **(click)** the less than operator with **(click)** **dunder lt**, **(click)** the greater than operator with **(click)** **dunder gt**, the **(click)** less than or equal to operator with **(click)** **dunder le**, and **(click)** the greater than or equal to operator with **(click)** **dunder ge**
           - After all this, our class is going to look pretty big
         </aside>
       </section>
@@ -187,9 +188,9 @@ class Month:
         return (self.year, self.month) &lt; (other.year, other.month)
         </code></pre>
         <aside class="notes" data-markdown>
-          - It's called `total_ordering` and it lives in the `functools` module
+          - It's called `total\_ordering` and it lives in the `functools` module
           - It allows us to implement just 2 comparison operators and it'll implement the others automatically
-          - Here we're implementing equality with `__eq__` and less than with `__lt_`
+          - Here we're implementing equality with `\_\_eq\_\_` and less than with `\_\_lt\_\_`
           - But there's still a lot of boilerplate code needed for this class
           - We're going to take a look at an even better way to make this class later, but first we're going to take a look at another example
         </aside>
@@ -283,7 +284,7 @@ class Point:
           - This class does quite a bit without too many lines of code
           - Some of this is probably new to you
           - If you haven't seen `yield` before, you can google generators and iterators and how to make them on your own
-          - This is basically copy-paste code time here.  Instead of memorizing all this, we can always copy-paste this class format when we need it.
+          - This is basically **code copy-paste time** here.  Instead of memorizing all this, we can always copy-paste this class format when we need it.
           - So while a lot of these things might be *new* to you, this code is pretty succinct for how much it does. But this is pretty much all boilerplate code.  We shouldn't have to type this out, or copy-paste it whenever we need code that works this way.
           - Fortunately, there is a tool in the Python standard library that can use to help us
         </aside>
@@ -348,10 +349,10 @@ Point = <span class="fragment bold-current" data-fragment-index=3>namedtuple('Po
         </code></pre>
         <aside class="notes" data-markdown>
           - Instead of using `collections.namedtuple`, you can now **(click)** inherit from the `typing.NamedTuple` class which does the same thing
-          - So while **(click)** `collections.namedtuple` is a **(click)** function that creates a class for you, **(click)** `typing.NamedTuple` is actually a class that you can inherit from
-          - This `NamedTuple` class gives you pretty much the same thing as the `namedtuple` function except that we use type hints to make define its attributes
-          - And you can specify default values for your attributes, which can be pretty handy in some cases
-          - Though it probably doesn't make much sense in this example **(click)**
+          - So while **(click)** `collections.namedtuple` is... a **(click)** function that creates a class for you, **(click)** `typing.NamedTuple` is actually a class that you can inherit from
+          - This `NamedTuple` class gives you pretty much the same thing as the `namedtuple` function except that we use **(click)** type hints to define its attributes
+          - And you can specify **(click)** default values for your attributes, which can be pretty handy in some cases
+          - Though it probably doesn't make much sense in the particular example we have here **(click)**
           - *(pause)*
           - In general named tuples are a pretty great way to get something a bit more descriptive than the built-in tuple type
           - But if you're using named tuples to replace a class that doesn't need to work like a tuple, you might want to think twice.  Let me explain why.
@@ -371,10 +372,10 @@ True
 3</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - Named tuples inherit from tuples **(click)**
+          - Named tuples inherit from **(click)** tuples
           - Which means they inherit all the features that tuples have
           - So they can be **(click)** ordered... which can be useful but sometimes it doesn't make sense, like in this case for example
-          - They can also be **(click)** added to each other... but the tuple returned from this **(click)** might not be what you'd expect
+          - They can also be **(click)** added to each other... but the object that comes back from this operation **(click)** might not be what you'd expect
           - The same is true for multiplication **(click)**
           - You can multiply namedtuples by integers, but the **(click)** thing you get back is a little odd
           - Also they have **(click)** a length... which also doesn't necessarily make sense in all cases
@@ -427,9 +428,9 @@ $ pip install attrs
 
 <span class="fragment bold-current">@attr.s(auto_attribs=True)</span>
 class Point:
-    x: float
+    <span class="fragment bold-current">x: float</span>
     y: float
-    z: float<span class="fragment"></span>
+    z: float
         </code></pre>
         <pre class="python fragment"><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
@@ -447,8 +448,9 @@ True</span>
           - That `auto_attribs` argument allows us to use **(click)** type hints to define our attributes
           - By default, **(click)** `attrs` classes get **(click)** a nice string representation
           - And **(click)** they can be logically compared to other objects of the same type
-          - But **(click)** they can also be ordered the same way named tuples can, which again is a bit odd in this case
-          - If we want our `Point` class to work just like the one we made manually before, we could do this
+          - But **(click)** they can also be *ordered* the same way named tuples can, which again is a bit odd in this case
+          - Our `Point` objects can be ordered and they aren't iterable or immutable yet
+          - If we want our `Point` class to work just like the one we made *manually* before, we could do this
         </aside>
       </section>
 
@@ -854,7 +856,7 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for +: 'Vector' and 'Vector'</span></code></pre>
         <aside class="notes" data-markdown>
           - What if you want other operations on your objects?
-          - For example what if have a `Vector` class and we want to be able to add together or subtract different vectors from each other?
+          - For example what if have a `Vector` class and we want to be able to **(click)** add together or **(click)** subtract different vectors from each other?
           - Data classes don't support that by default, so you have to implement those operations yourself
         </aside>
       </section>
@@ -895,37 +897,12 @@ Vector(x=3, y=3, z=3)</span>
       <section>
 
       <section data-transition="slide-in slide-out" data-transition-speed="slide-in default-out">
-        <h2>Advanced Recipes Ahead...</h2>
+        <h2>Advanced Recipes</h2>
         <aside class="notes" data-markdown>
-          - So there are a lot of things that I'm not going to dive deep into because they're just too deep and too complex and too niche for this talk
-          - But I'm going to show each of these very briefly in case you want to check them out later...
-        </aside>
-      </section>
-
-      <section>
-        <h2>Metadata on fields?</h2>
-        <pre class="python"><code data-trim data-noescape>
-from dataclasses import dataclass, astuple
-
-@dataclass
-class Point:
-    x: float
-    y: float
-    z: float
-    <span class="fragment bold-current">color: str</span>
-    def __iter__(self):
-        yield from astuple(self)
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> x, y, z = Point(1, 2, 3, color='red')
-<span class="fragment">Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-ValueError: too many values to unpack (expected 3)</span></code></pre>
-        <aside class="notes" data-markdown>
-          - What if we wanted to add **(click)** a `color` field that should be treated differently than our coordinates?
-          - If we unpack **(click)** our `Point` into x-y-z variables as before, **(click)** we'll get an error
-          - That multiple assignment only has 3 values but our `color` field needs to include there also
-          - If we wanted only some of our fields to be used when iterating over our object, we could use metadata for our fields
+          - So I have even more recipes, but they're kind of advanced and I'm going to skip over these slides entirely because I don't have time to go through them
+          - I will tweet out a link to the slides later in case you're interested in them though
+          - **[skip this section]**
+          - Before we wrap up, I'd like you to consider...
         </aside>
       </section>
 
@@ -1064,11 +1041,11 @@ TypeError: __init__() got an unexpected keyword argument 'color'</span>
       <section>
 
       <section>
-        <h2>Should I make a class?</h2>
-        <h3 class="fragment"><a href="http://exercism.io/">Exercism.io</a></h3>
+        <h1>Should I make a class?</h1>
+        <h4 class="fragment">(Examples inspired by <a href="http://exercism.io/">exercism.io</a>)</h4>
         <aside class="notes" data-markdown>
           - Whether you even need classes.
-          - I'd like to take a look at 2 code snippets that I wrote to solve exercises on Exercism.io, which is a popular programming exercise website
+          - I'd like to take a look at 2 code snippets that I wrote to solve exercises on **(click)** Exercism.io, which is a popular programming exercise website
           - Exercism is wonderful, except in a few cases where it pushes to write code that is... *un-friendly*
         </aside>
       </section>
@@ -1199,7 +1176,7 @@ ORBITAL_PERIOD = {
     'neptune': 164.79132,
 }
 
-def age_on_planet(seconds_alive, planet):
+def age_on_planet(<span class="fragment bold-current">seconds_alive</span>, <span class="fragment bold-current">planet</span>):
     """Return age on a given planet."""
     annual_seconds = SECONDS_IN_EARTH_YEAR * ORBITAL_PERIOD[planet]
     return round(seconds_alive / annual_seconds, 2)
@@ -1213,11 +1190,12 @@ def age_on_planet(seconds_alive, planet):
 131.57</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - This `age_on_planet` function accepts that number of seconds we've been alive and the name of a planet and it returns our age on that planet
+          - This `age_on_planet` function accepts **(click)** the number of seconds we've been alive and **(click)** the name of a planet and it returns our age on that planet
           - Just as before, we can get our age on **(click)** `earth`, **(click)** `mars`, or **(click)** `mercury`
           - But we don't have to construct a new class instance to do it
+          - *(pause)*
           - You **do not** always need classes
-          - Friendly code is great, but the friendliest code sometimes doesn't have classes at all
+          - Friendly classes are great, but the friendliest code sometimes doesn't have classes at all
         </aside>
       </section>
 
@@ -1259,7 +1237,7 @@ def age_on_planet(seconds_alive, planet):
         </p>
         <aside class="notes" data-markdown>
           - I'd love to help you improve your Python skills
-          - Feel free to come find me later and talk to me about that
+          - Find me in the halls or at my booth if you'd like to chat about that later
           - Thank you!
         </aside>
       </section>
