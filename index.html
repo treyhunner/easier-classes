@@ -34,27 +34,30 @@
           <small><a href="http://treyhunner.com" rel="author">Trey Hunner</a> / <a href="https://twitter.com/treyhunner">@treyhunner</a></small>
           </p>
           <aside class="notes" data-markdown>
-            Alright.  Before we jump into this talk, let me quickly introduce myself.
+            Alright.  We're probably going to be a bit time crunched, so let's get started.
+
+            I don't really have time to introduce myself so all that I'm going to say about me, is that I teach Python
           </aside>
         </section>
 
+      <!-- 1 minute -->
         <section>
-          <div class="aboutme-card">
-            <a href="http://truthful.technology"><img src="truthful-technology-logo.svg" class="no-style aboutme-logos" alt="Truthful Technology"></a>
-          </div>
           <div class="aboutme-card">
             <a href="http://pythonmorsels.com"><img src="morsels-logo.svg" class="no-style aboutme-logos" alt="Python Morsels"></a>
           </div>
+          <div class="aboutme-card">
+            <a href="http://truthful.technology"><img src="truthful-technology-logo.svg" class="no-style aboutme-logos" alt="Truthful Technology"></a>
+          </div>
           <aside class="notes" data-markdown>
-            - My name is Trey
-            - I help Python &amp; Django teams on-board new teammates and turn their front-end developers into full-stack Django developers.
-            - And I run a Python exercise subscription service where where I send out 1 Python exercise every week.  It's called Python Morsels.
-            - Let's talk about classes.
+            - I run a Python skill-building service called Python Morsels, which I have stickers for if you want one
+            - I also do Python and Django training for teams
+            - So that's me... we're talking about classes
           </aside>
         </section>
 
       </section>
 
+      <!-- 1 minute -->
       <section>
         <h3 class="fragment strike" data-fragment-index=1>Pythonic Classes</h3>
         <h2 class="fragment" data-fragment-index=1>Friendly Classes</h2>
@@ -64,15 +67,16 @@
           <li class="fragment">embrace operator overloading</li>
         </ul>
         <aside class="notes" data-markdown>
-          - I'd like to talk about making classes that are easy for developers to use
-          - I'm tempted to use the phrase Pythonic classes to describe this idea, but that word Pythonic is a bit loaded, so I'm going to instead say that we're making **friendly** classes **(click)**
-          - Friendly classes are friendly for the developers who use them
+          - I'm tempted to say that I'd like to talk about Pythonic classes, but that work is little controversial and a little overused
+          - So instead, I'll say that we're talking about **(click)** friendly classes
+          - Our goal is to make classes that are friendlier for other developers to use
           - Friendly classes **(click)** have a nice string representation
           - They **(click)** can be compared to each other in ways that make sense
           - And whenever it makes, they **(click)** overload operators to allow themselves to be addable, iterable, hashable on so on
         </aside>
       </section>
 
+      <!-- 2.5 minutes -->
       <section>
 
       <section>
@@ -200,6 +204,7 @@ class Month:
 
       <section>
 
+      <!-- 3 minutes -->
       <section>
         <h1>Case 2: Point class</h1>
         <aside class="notes" data-markdown>
@@ -292,70 +297,47 @@ class Point:
 
       </section>
 
+      <!-- 3 minutes -->
       <section>
 
       <section>
-        <h1>namedtuple</h1>
+        <h1>NamedTuple</h1>
         <aside class="notes" data-markdown>
-          - It's a helper function called `namedtuple` and it's in both Python 2 and Python 3
+          - It's a helper class called `NamedTuple` and it's built-in to Python 3
         </aside>
       </section>
 
       <section>
         <pre class="python fragment" data-fragment-index=1><code data-trim data-noescape>
-from collections import namedtuple
+from typing import NamedTuple
 
-<span class="fragment" data-fragment-index=2>Point = <span class="fragment bold" data-fragment-index=10>namedtuple('Point', ['x', 'y', 'z'])</span></span>
+<span class="fragment" data-fragment-index=2>class Point(NamedTuple):
+    <span class="fragment bold-current" data-fragment-index=3>x: float
+    y: float
+    z: float</span></span>
         </code></pre>
-        <pre class="python fragment" data-fragment-index=3><code data-trim data-noescape>
+        <pre class="python fragment" data-fragment-index=4><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
->>> <span class="fragment" data-fragment-index=4>p
+>>> <span class="fragment" data-fragment-index=5>p
 Point(x=1, y=2, z=3)
->>> </span><span class="fragment" data-fragment-index=5>p == Point(1, 2, 3)
+>>> </span><span class="fragment" data-fragment-index=6>p == Point(1, 2, 3)
 True
->>> </span><span class="fragment" data-fragment-index=6>p.x = 4
+>>> </span><span class="fragment" data-fragment-index=7>p.x = 4
 Traceback (most recent call last):
   File "&lt;stdin>", line 1, in &lt;module>
 AttributeError: cannot set attribute
->>> </span><span class="fragment" data-fragment-index=7>{Point(1, 2, 3), Point(1, 2, 3)}
-{Point(x=1, y=2, z=3)}</span>
+>>> </span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - The **(click)** `namedtuple` function lives in the `collections` module
-          - `namedtuple` isn't a class so much as a factory function that creates new classes
-          - When you call `namedtuple`, you pass **(click)** in the name of the class and the attributes the class should have, and it'll dynamically create a new class for you
-          - The **(click)** classes created by `namedtuple` have **(click)** a friendly string representation
-          - **(click)** They can be compared to each other
-          - And **(click)** they're immutable, and **(click)** hashable, just like tuples
-          - So out-of-the-box, `namedtuple` pretty much gives us all the things we were looking for in our `Point` class
-          - The **(click)** way we call `namedtuple` might seem a little unintuitive though
-          - As of Python 3.5, there's an even better way to use `namedtuple`
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-from typing import NamedTuple
-
-<span class="fragment" data-fragment-index=1><span class="fragment bold-current" data-fragment-index=4>class Point(NamedTuple)</span>:
-    <span class="fragment bold-current" data-fragment-index=5>x: float <span class="fragment current-visible" data-fragment-index=6>= 0</span>
-    y: float <span class="fragment current-visible" data-fragment-index=6>= 0</span>
-    z: float <span class="fragment current-visible" data-fragment-index=6>= 0</span><span class="fragment" data-fragment-index=7></span></span></span>
-        </code></pre>
-        <pre class="python fragment" data-fragment-index=2><code data-trim data-noescape>
-from collections import namedtuple
-
-Point = <span class="fragment bold-current" data-fragment-index=3>namedtuple('Point', ['x', 'y', 'z'])</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Instead of using `collections.namedtuple`, you can now **(click)** inherit from the `typing.NamedTuple` class which does the same thing
-          - So while **(click)** `collections.namedtuple` is... a **(click)** function that creates a class for you, **(click)** `typing.NamedTuple` is actually a class that you can inherit from
-          - This `NamedTuple` class gives you pretty much the same thing as the `namedtuple` function except that we use **(click)** type hints to define its attributes
-          - And you can specify **(click)** default values for your attributes, which can be pretty handy in some cases
-          - Though it probably doesn't make much sense in the particular example we have here **(click)**
-          - *(pause)*
-          - In general named tuples are a pretty great way to get something a bit more descriptive than the built-in tuple type
-          - But if you're using named tuples to replace a class that doesn't need to work like a tuple, you might want to think twice.  Let me explain why.
+          - `NamedTuple` lives in the `typing` module **(click)**
+          - To create a new `NamedTuple` class, you inherit from `NamedTuple` and **(click)** use type hints to define attributes on the class
+          - The **(click)** class we get from this has **(click)** a friendly string representation
+          - **(click)** Nice default comparisons
+          - And **(click)** they're immutable, just like tuples
+          - By the way, if you've seen `namedtuple` before but the inheritance syntax I'm using looks a little unfamiliar that's because there's another way to use `namedtuple` that existed in Python 2 which was a bit more awkward
+          - This way of using it I'm showing here was inspired by `attrs` and works in Python 3.5 and above
+          - So out-of-the-box, `NamedTuple` pretty much gives us all the things we were looking for in our `Point` class
+          - But using `NamedTuple` to implement our `Point` class has some downsides
         </aside>
       </section>
 
@@ -374,8 +356,8 @@ True
         <aside class="notes" data-markdown>
           - Named tuples inherit from **(click)** tuples
           - Which means they inherit all the features that tuples have
-          - So they can be **(click)** ordered... which can be useful but sometimes it doesn't make sense, like in this case for example
-          - They can also be **(click)** added to each other... but the object that comes back from this operation **(click)** might not be what you'd expect
+          - So they can be **(click)** ordered... which can be useful but it doesn't really make sense for our `Point` objects
+          - They can also be **(click)** added to each other... but the object that comes back from this operation **(click)** *might* not be what you'd expect
           - The same is true for multiplication **(click)**
           - You can multiply namedtuples by integers, but the **(click)** thing you get back is a little odd
           - Also they have **(click)** a length... which also doesn't necessarily make sense in all cases
@@ -401,14 +383,16 @@ class Point(NamedTuple):
     def __len__(self, other): raise TypeError
         </code></pre>
         <aside class="notes" data-markdown>
-          - You can fix these problems by overloading the appropriate operators in your named tuple class so that they all raise exceptions
-          - But finding and removing features that you don't want is often trickier than adding features that you do want
-          - If these features of named tuples are inappropriate for your use case, you probably shouldn't use them
+          - You *can* try to override a bunch of methods to fix this issue, but that's *really* awkward
+          - Finding and removing features that you *don't* want is often trickier than *adding* features that you do want
+          - So don't use `NamedTuple` unless you're trying to make something that **acts like a tuple**
         </aside>
       </section>
 
       </section>
 
+      <!-- TODO shave off a minute from here somehow? -->
+      <!-- 3 minutes -->
       <section>
 
       <section>
@@ -475,12 +459,12 @@ class Point:
         <aside class="notes" data-markdown>
           - Here we've **(click)** frozen our object so the attributes can't be modified
           - We've also added **(click)** a dunder iter method to make our object work with multiple assignment
-          - And we've **(click)** disabled comparisons so we don't get automatic ordering, but that means we need to implement **(click)** a dunder eq method
-          - We also need to implement **(click)** a dunder hash method ourselves
-          - Normally we would get that for free with frozen classes, but disabling comparisons also disables hashing by default **(click)**
-          - So the attrs library is more powerful than named tuples, but it does sometimes take a bit of playing to get it just right
-          - Also it's a third party library which means you'll need to install it whenever you want to use it
-          - There's something similar to `attrs` that's actually bundled with Python though
+          - And we've **(click)** disabled comparisons so we don't get automatic ordering, but that means we have to do a lot of extra work by...
+            - implementing **(click)** a dunder eq method
+            - and implementing **(click)** a dunder hash method
+          - So the `attrs` library is more powerful than named tuples, but it can take a bit of playing with sometimes
+          - Plus it's a third party library which means you'll need to install it whenever you want to use it
+          - But there's an `attrs`-like library that's actually bundled with Python now
         </aside>
       </section>
 
@@ -488,6 +472,7 @@ class Point:
 
       <section>
 
+      <!-- 4 minutes -->
       <section>
         <h1>dataclasses</h1>
         <aside class="notes" data-markdown>
@@ -631,20 +616,19 @@ dataclasses.FrozenInstanceError: cannot assign to field 'x'</span>
         <aside class="notes" data-markdown>
           - Now that we've frozen our `Point` class, if we **(click)** try to assign an attribute on a point object, **(click)**, we'll get an error
           - Which is just what we're looking for
-          - So our class is now iterable, immutable, comparable, and it has a nice representation.  But it's *not* orderable, it *doesn't have a length, and it *doesn't* have other features that don't make sense either
+          - So our class is now iterable, immutable, comparable, and it has a nice representation.  But it's *not* orderable, it *doesn't* have a length, and it *doesn't* have other features that don't make sense either
           - So using dataclasses, we've made a **friendly class** that has just the features that we want
           - All in less than 10 lines of code.  I think this is pretty cool.
         </aside>
       </section>
-
 
       <section>
         <h2>dataclasses</h2>
         <ul>
           <li class="fragment">Built-in to standard library <span class="fragment">(in Python 3.7)</span></li>
           <li class="fragment">Available as a third-party library</li>
-          <li class="fragment">dataclasses is simpler, but less feature-rich than attrs</li>
           <li class="fragment">While attrs supports both Python 2 and Python 3, dataclasses only work on Python 3</li>
+          <li class="fragment">dataclasses is simpler, but less feature-rich than attrs</li>
         </ul>
         <aside class="notes" data-markdown>
           - When I told you before that dataclasses are **(click)** included in the Python standard library, I meant that **(click)** it's included with Python 3.7
@@ -657,6 +641,7 @@ dataclasses.FrozenInstanceError: cannot assign to field 'x'</span>
 
       </section>
 
+      <!-- 4 minutes -->
       <section>
 
       <section>
@@ -693,13 +678,13 @@ True
           - Without any other customization, data classes give you:
             - a good string representation for your object
             - and they allow you to compare objects to each other with the equality and inequality operators
-          - That's what you get out of the box with data classes, without any extra customization
-          - As I just showed you, it's also possible to make your dataclasses immutable...
+          - That's what data classes give you without any customization
+          - And that might be all you need
         </aside>
       </section>
 
       <section data-transition="none-in none-out" data-transition-speed="fast-in fast-out">
-        <h2>Immutability!</h2>
+        <h2>Immutability</h2>
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass
 
@@ -711,158 +696,76 @@ class Point:
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
 >>> p = Point(1, 2, 3)
->>> <span class="fragment">p.x = 4
+>>> p.x = 4
 Traceback (most recent call last):
   File "&lt;stdin>", line 1, in &lt;module>
   File "&lt;string>", line 3, in __setattr__
-dataclasses.FrozenInstanceError: cannot assign to field 'x'</span>
+dataclasses.FrozenInstanceError: cannot assign to field 'x'
         </code></pre>
         <aside class="notes" data-markdown>
-          - By setting **(click)** `frozen` to True
-          - This makes it so we **(click)** can't assign to any of the attributes in our class after it's been constructed
-          - And as an added bonus, setting frozen to True also makes your class hashable...
-        </aside>
-      </section>
-
-      <section data-transition="none-in none-out" data-transition-speed="fast-in fast-out">
-        <h2>Hashability!</h2>
-        <pre class="python"><code data-trim data-noescape>
-from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Point:
-    x: float
-    y: float
-    z: float
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment">aliveness= {Point(1, 2, 3): True, Point(4, 5, 6): False}
->>> </span><span class="fragment">aliveness[Point(4, 5, 6)]
-False
->>> aliveness[Point(1, 2, 3)]
-True
-
-</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Meaning we can use our objects in sets or as **(click)** keys in dictionaries
-          - Which can be pretty handy **(click)**
-          - Normally dataclasses aren't hashable because it's usually a bad idea to allow mutable objects to be hashable.  There is a way to make non-frozen classes hashable, but I'm going to skip over that.
+          - But you can also make your data classes immutable by setting **(click)** frozen to True
+          - This also makes our classes hashable, if that's a thing you care about
         </aside>
       </section>
 
       <section data-transition="none-in slide-out" data-transition-speed="fast-in default-out">
-        <h2>Iterability!</h2>
-        <pre class="python"><code data-trim data-noescape>
-from dataclasses import dataclass<span class="fragment" data-fragment-index=3>, astuple</span>
-
-@dataclass
-class Point:
-    x: float
-    y: float
-    z: float
-    <span class="fragment" data-fragment-index=3>def __iter__(self):
-        yield from astuple(self)</span>
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> p = Point(1, 2, 3)
-<span class="fragment" data-fragment-index=1>>>> x, y, z = p</span>
-<span class="fragment" data-fragment-index=2>>>> tuple(p)
-(1, 2, 3)
-</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - And we've already seen that if we want to make a dataclass that is iterable, meaning it **(click)** supports multiple assignment or **(click)** can be iterated over...
-          - That we can make **(click)** a dunder iter method for that
-          - *(pause)*
-          - One thing I haven't shown you is how to make orederable data classes...
-        </aside>
-      </section>
-
-      <section data-transition="slide-in none-out" data-transition-speed="default-in fast-out">
-        <h2>Orderability?</h2>
-        <pre class=""><code data-trim data-noescape>
-from dataclasses import dataclass
-
-@dataclass
-class Month:
-    year: int
-    month: int
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape style="overflow: hidden;">
->>> eol_month = Month(2020, 1)
->>> eol_month
-Month(year=2020, month=1)
->>> <span class="fragment">eol_month > Month(2019, 12)</span>
-<span class="fragment">Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-TypeError: '>' not supported between instances of 'Month' and 'Month'</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - Before we talked about named tuples, attrs, *or* data classes, we made a `Month` class
-          - We made our `Month` class orderable, meaning **(click)** we were able to use the less than and greater than operators to compare different months
-          - Data classes **(click)** don't support ordering by default
-          - But if we *do* want orderable data classes...
-        </aside>
-      </section>
-
-      <section data-transition="none-in slide-out" data-transition-speed="fast-in default-out">
-        <h2>Orderability!</h2>
-        <pre class=""><code data-trim data-noescape>
-from dataclasses import dataclass
-
-@dataclass<span class="fragment bold-current">(order=True)</span>
-class Month:
-    year: int
-    month: int
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> Month(2020, 1) > Month(2019, 12)
-True
->>> months = [Month(2018, 6), Month(2018, 1), Month(2019, 10)]
->>> <span class="fragment">print(*sorted(months), sep='\n')
-Month(year=2018, month=1)
-Month(year=2018, month=6)
-Month(year=2019, month=10)</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - We can set **(click)** `order` equal to `True` when we decorator our `dataclass`
-          - This makes our class order items lexicographically **(click)**, which is just the fancy name for the way that Python orders tuples, lists, strings, and pretty much every other type of orderable collection
-          - So ordering is disabled by default, but if you want ordering you can turn it on
-        </aside>
-      </section>
-
-      <section data-transition="slide-in none-out" data-transition-speed="default-in fast-out">
-        <h2>Summability and other operations?</h2>
+        <h2>Iterability</h2>
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass, astuple
 
 @dataclass
-class Vector:
+class Point:
     x: float
     y: float
     z: float
+    def __iter__(self):
+        yield from astuple(self)
         </code></pre>
         <pre class="python"><code data-trim data-noescape>
->>> p = Vector(1, 2, 3)
->>> q = Vector(4, 5, 6)
->>> <span class="fragment">p + q
-Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-TypeError: unsupported operand type(s) for +: 'Vector' and 'Vector'
->>> <span><span class="fragment">q - p
-Traceback (most recent call last):
-  File "&lt;stdin>", line 1, in &lt;module>
-TypeError: unsupported operand type(s) for +: 'Vector' and 'Vector'</span></code></pre>
+>>> p = Point(1, 2, 3)
+>>> x, y, z = p
+>>> tuple(p)
+(1, 2, 3)
+        </code></pre>
         <aside class="notes" data-markdown>
-          - What if you want other operations on your objects?
-          - For example what if have a `Vector` class and we want to be able to **(click)** add together or **(click)** subtract different vectors from each other?
-          - Data classes don't support that by default, so you have to implement those operations yourself
+          - And something we've seen that's unrelated to data classes, but certainly works with them, is iterability
+          - We can make a `\_\_iter\_\_` method on any class to make our class iterable
+          - That `astuple` helper just makes it *a tiny bit* easier with data classes
+          - *(pause)*
+          - One thing I haven't shown you is how to make orderable data classes...
         </aside>
       </section>
 
       <section data-transition="none-in slide-out" data-transition-speed="fast-in default-out">
-        <h2>Summability and other operations!</h2>
+        <h2>Orderability</h2>
+        <pre class=""><code data-trim data-noescape>
+from dataclasses import dataclass
+
+@dataclass<span class="fragment bold-current" data-fragment-index=2>(order=True)</span>
+class Month:
+    year: int
+    month: int
+        </code></pre>
+        <pre class="python"><code data-trim data-noescape>
+>>> Month(2019, 12) &lt; Month(2020, 1)
+True
+>>> months = [Month(2018, 6), Month(2018, 1), Month(2019, 10)]
+>>> print(*sorted(months), sep='\n')
+Month(year=2018, month=1)
+Month(year=2018, month=6)
+Month(year=2019, month=10)
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - Before we talked about named tuples, attrs, *or* data classes, we made a `Month` class which was orderable
+          - Meaning we could use comparison operators, like less than, to ask whether one month object was less than another
+          - To get this to work as we we'd expect, we can set the `order` to True **(click)** when we decorator our data class
+          - This makes our class order items lexicographically, which is just the fancy name for the way that Python orders tuples, lists, strings, and pretty much every other type of orderable collection
+          - One more thing I'd like to discuss that's not at all data class specific is...
+        </aside>
+      </section>
+
+      <section data-transition="none-in slide-out" data-transition-speed="fast-in default-out">
+        <h2>Friendly operations</h2>
         <pre class="python"><code data-trim data-noescape>
 from dataclasses import dataclass, astuple
 
@@ -884,14 +787,143 @@ Vector(x=5, y=7, z=9)
 Vector(x=3, y=3, z=3)</span>
         </code></pre>
         <aside class="notes" data-markdown>
-          - But it's not hard
-          - Here we've implemented dunder add and dunder sub methods for **(click)** addition and **(click)** subtraction
-          - Here we're looping over our vector instances and adding each field together individually
-          - And that works because we've made our class is iterable, since it has that dunder iter method
-          - Because our class is iterable, we're able to delegate work to our dunder iter method, which makes our dunder add and dunder sub implementations a little more flexible
+          - Dunder methods!
+          - One of the secrets to making a friendly class is embracing dunder methods
+          - This is a class that implements `\_\_iter\_\_`, `\_\_add\_\_` and `\_\_sub\_\_`.
+          - The `\_\_add\_\_` and `\_\_sub\_\_` methods make addition **(click)** and subtraction **(click)** work our class
+          - And that `\_\_iter\_\_` method makes the implementation of those other two methods a bit simpler
+          - Sometimes people call dunder methods *magic methods*
+          - Dunder methods are **not** magical and they're not scary: dunder methods can make class friendlier
+          - *(pause)*
+          - Before we wrap up, I'd like you to consider...
         </aside>
       </section>
 
+      </section>
+
+      <!-- 3 minutes -->
+      <section>
+
+      <section>
+        <h1>Should I make a class?</h1>
+        <aside class="notes" data-markdown>
+          - Whether you even need classes
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+class Matrix:
+    """Turn a string into a matrix-like thing."""
+    def __init__(self, string):
+        self.string = string
+    @property
+    def rows(self):
+        return [
+            [float(x) for x in row.split()]
+            for row in self.string.splitlines()
+        ]
+    @property
+    def columns(self):
+        return [
+            list(column)
+            for column in zip(*self.rows)
+        ]
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> <span class="fragment">matrix = Matrix("9 8 7\n5 3 2\n6 6 7")
+>>> </span><span class="fragment">matrix.rows
+[[9, 8, 7], [5, 3, 2], [6, 6, 7]]
+>>> </span><span class="fragment">matrix.columns
+[[9, 5, 6], [8, 3, 6], [7, 2, 7]]</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - This is a class that represents a matrix **(click)**
+          - This class accepts **(click)** a string that represents a matrix of numbers, separated by spaces and newline characters
+          - When we construct a `Matrix` from our class, that `matrix` object will have **(click)** a rows attribute that gives us back the rows in our matrix
+          - And it also has **(click)** a columns attribute that gives us back a *transposed* version of those rows
+          - *This class* **does not** need to exist
+          - I say that, because we could *replace* this class...
+        </aside>
+      </section>
+
+      <section>
+        <pre class="python"><code data-trim data-noescape>
+<span class="fragment">def matrix_from_string(string):
+    """Convert rows of numbers to list of lists."""
+    return [
+        [float(x) for x in row.split()]
+        for row in string.splitlines()
+    ]</span>
+
+<span class="fragment">def transpose(matrix):
+    """Return a transposed version of given list of lists."""
+    return [
+        list(column)
+        for column in zip(*matrix)
+    ]</span>
+        </code></pre>
+        <pre class="python fragment"><code data-trim data-noescape>
+>>> matrix = matrix_from_string("9 8 7\n5 3 2\n6 6 7")
+>>> <span class="fragment">matrix
+[[9, 8, 7], [5, 3, 2], [6, 6, 7]]
+>>> </span><span class="fragment">transpose(matrix)
+[[9, 5, 6], [8, 3, 6], [7, 2, 7]]</span>
+        </code></pre>
+        <aside class="notes" data-markdown>
+          - With two functions:
+          - matrix_from_string **(click)** and transpose **(click)**
+          - We call call that `matrix_from_string` function the **(click)** same way we called our `Matrix` class constructor before
+          - But instead of giving us a `matrix` object back, **(click)** it gives us back a list of numbers, just like our `rows` attribute did on our `matrix` object
+          - If we pass that list of numbers to the `transpose` function **(click)**, we'll get back the transpose matrix of that list of numbers, just like we did when we used the `columns` attribute on the matrix that we had before
+          - *(pause)*
+          - You **do not** always need classes
+          - Friendly classes are great, but the friendliest code sometimes doesn't have classes at all
+        </aside>
+      </section>
+
+      </section>
+
+      <!-- 1 minute -->
+      <section>
+        <h2>When making classes, consider...</h2>
+        <ul>
+          <li class="fragment">You don't always need custom classes for your data <nobr class="fragment">(see Jack Diederich's <a href="https://www.youtube.com/watch?v=o9pEzgHorH0">Stop Writing Classes</a>)</nobr></li>
+          <li class="fragment">Custom can make things very handy, but they can be a step backward unless you <strong>make them friendly</strong></li>
+          <li class="fragment">Friendly classes can require a lot of boilerplate code</li>
+          <li class="fragment">To avoid distracting boilerplate code, use <code>dataclasses</code> <span class="fragment">or <code>attrs</code> for creating custom data-heavy classes</span></li>
+        </ul>
+        <aside class="notes" data-markdown>
+          - So when making classes I'd like to you to consider **(click)** whether you even need a class.  Because you often don't.
+          - **(click)** There's a talk on this subject I'd recommend watching called Stop Writing Classes
+          - If you do decide you need a class, you should make it a friendly one.  **(click)** Using your class should feel *almost* as natural as using one of Python's built-in data types
+          - **(click)** Creating a friendly class involves writing a lot of boilerplate code
+          - **(click)** But the dataclasses library can help with this
+          - If you're on Python 3.7, it comes bundled with Python. If you're on an earlier version of Python 3, you can pip-install it.
+          - And there's always the attrs library **(click)**, for times when dataclasses isn't enough for you or if you're still using Python 2
+        </aside>
+      </section>
+
+      <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
+        <h2>Need help getting your team <nobr>up to speed on Python?</nobr></h2>
+        <h3>
+          <strong>Trey Hunner</strong><br>
+          <small>Python &amp; Django Team Trainer</small>
+        </h3>
+        <p>
+          <small>
+            Contact me: <a href="mailto:&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;">&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;</a>
+          </small>
+        </p>
+        <p>
+        <a href="http://truthful.technology"><img src="logo.svg" class="no-style logo"></a>
+        <a href="http://pythonmorsels.com"><img src="python-morsels-logo.svg" class="no-style logo"></a>
+        </p>
+        <aside class="notes" data-markdown>
+          - I'd love to help you improve your Python skills
+          - Find me in the hallway or send me an email if you'd like to chat about improve your Python skills or your team's Python skills
+          - Thank you!
+        </aside>
       </section>
 
       <section>
@@ -1037,211 +1069,6 @@ TypeError: __init__() got an unexpected keyword argument 'color'</span>
       </section>
 
       </section>
-
-      <section>
-
-      <section>
-        <h1>Should I make a class?</h1>
-        <h4 class="fragment">(Examples inspired by <a href="http://exercism.io/">exercism.io</a>)</h4>
-        <aside class="notes" data-markdown>
-          - Whether you even need classes.
-          - I'd like to take a look at 2 code snippets that I wrote to solve exercises on **(click)** Exercism.io, which is a popular programming exercise website
-          - Exercism is wonderful, except in a few cases where it pushes to write code that is... *un-friendly*
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-class Matrix:
-    """Turn a string into a matrix-like thing."""
-    def __init__(self, string):
-        self.string = string
-    @property
-    def rows(self):
-        return [
-            [float(x) for x in row.split()]
-            for row in self.string.splitlines()
-        ]
-    @property
-    def columns(self):
-        return [
-            list(column)
-            for column in zip(*self.rows)
-        ]
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> <span class="fragment">matrix = Matrix("9 8 7\n5 3 2\n6 6 7")
->>> </span><span class="fragment">matrix.rows
-[[9, 8, 7], [5, 3, 2], [6, 6, 7]]
->>> </span><span class="fragment">matrix.columns
-[[9, 5, 6], [8, 3, 6], [7, 2, 7]]</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - This is a class that represents a matrix **(click)**
-          - This class accepts **(click)** a string that represents a matrix of numbers, separated by spaces and newline characters
-          - When we construct a `Matrix` from our class, that `matrix` object will have **(click)** a rows attribute that gives us back the rows in our matrix
-          - And it also has **(click)** a columns attribute that gives us back a *transposed* version of those rows
-          - *This class* **does not** need to exist
-          - I say that, because we could *replace* this class...
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-<span class="fragment">def matrix_from_string(string):
-    """Convert rows of numbers to list of lists."""
-    return [
-        [float(x) for x in row.split()]
-        for row in string.splitlines()
-    ]</span>
-
-<span class="fragment">def transpose(matrix):
-    """Return a transposed version of given list of lists."""
-    return [
-        list(column)
-        for column in zip(*matrix)
-    ]</span>
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> matrix = matrix_from_string("9 8 7\n5 3 2\n6 6 7")
->>> <span class="fragment">matrix
-[[9, 8, 7], [5, 3, 2], [6, 6, 7]]
->>> </span><span class="fragment">transpose(matrix)
-[[9, 5, 6], [8, 3, 6], [7, 2, 7]]</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - With two functions:
-          - matrix_from_string **(click)** and transpose **(click)**
-          - We call call that `matrix_from_string` function the **(click)** same way we called our `Matrix` class constructor before
-          - But instead of giving us a `matrix` object back, **(click)** it gives us back a list of numbers, just like our `rows` attribute did on our `matrix` object
-          - If we pass that list of numbers to the `transpose` function **(click)**, we'll get back the transpose matrix of that list of numbers, just like we did when we used the `columns` attribute on the matrix that we had before
-          - We just replaced a class with two functions
-          - You might think: so what?  We had a three method class and now we just have 2 functions.  That wasn't really a big deal.
-          - Let's look at another example
-        </aside>
-      </section>
-
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-class SpaceAge:
-    SECONDS_IN_EARTH_YEAR = 31557600.0
-    def __init__(self, seconds):
-        self.seconds = seconds
-    def on_earth(self):
-        annual_seconds = self.SECONDS_IN_EARTH_YEAR
-        return round(self.seconds / annual_seconds, 2)
-    def on_mercury(self):
-        annual_seconds = self.SECONDS_IN_EARTH_YEAR * 0.2408467
-        return round(self.seconds / annual_seconds, 2)
-    def on_venus(self):
-        annual_seconds = self.SECONDS_IN_EARTH_YEAR * 0.61519726
-        return round(self.seconds / annual_seconds, 2)
-    def on_mars(self):
-        annual_seconds = self.SECONDS_IN_EARTH_YEAR * 1.8808158
-        return round(self.seconds / annual_seconds, 2)
-    # ...
-        </code></pre>
-        <pre class="python fragment"><code data-trim data-noescape>
->>> age = SpaceAge(seconds=1_000_000_000)
-<span class="fragment">>>> age.on_earth()
-31.69
->>> </span><span class="fragment">age.on_mars()
-16.85
->>> </span><span class="fragment">age.on_mercury()
-131.57</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - This is a class that allows you to calculate your age on a given planet given the number of seconds that you've been alive for
-          - We can use this class by creating **(click)** a `SpaceAge` object with the number of seconds we've been alive
-          - We can then calculate our age on various planets by calling the method that correspons to them
-          - For example we can calculate our age on **(click)** `earth`, **(click)** `mars`, or **(click)** `mercury`
-          - This is another class that doesn't need to exist
-          - We could replace this whole class with one function
-        </aside>
-      </section>
-
-      <section>
-        <pre class="python"><code data-trim data-noescape>
-SECONDS_IN_EARTH_YEAR = 31557600
-
-ORBITAL_PERIOD = {
-    'earth': 1,
-    'mercury': 0.2408467,
-    'venus': 0.61519726,
-    'mars': 1.8808158,
-    'jupiter': 11.862615,
-    'saturn': 29.447498,
-    'uranus': 84.016846,
-    'neptune': 164.79132,
-}
-
-def age_on_planet(<span class="fragment bold-current">seconds_alive</span>, <span class="fragment bold-current">planet</span>):
-    """Return age on a given planet."""
-    annual_seconds = SECONDS_IN_EARTH_YEAR * ORBITAL_PERIOD[planet]
-    return round(seconds_alive / annual_seconds, 2)
-        </code></pre>
-        <pre class="python"><code data-trim data-noescape>
->>> <span class="fragment">age_on_planet(seconds=1_000_000_000, planet='earth')
-31.69
->>> </span><span class="fragment">age_on_planet(seconds=1_000_000_000, planet='mars')
-16.85
->>> </span><span class="fragment">age_on_planet(seconds=1_000_000_000, planet='mercury')
-131.57</span>
-        </code></pre>
-        <aside class="notes" data-markdown>
-          - This `age_on_planet` function accepts **(click)** the number of seconds we've been alive and **(click)** the name of a planet and it returns our age on that planet
-          - Just as before, we can get our age on **(click)** `earth`, **(click)** `mars`, or **(click)** `mercury`
-          - But we don't have to construct a new class instance to do it
-          - *(pause)*
-          - You **do not** always need classes
-          - Friendly classes are great, but the friendliest code sometimes doesn't have classes at all
-        </aside>
-      </section>
-
-      </section>
-
-      <section>
-        <h2>When making classes, consider...</h2>
-        <ul>
-          <li class="fragment">You don't always need custom classes for your data <nobr class="fragment">(see Jack Diederich's <a href="https://www.youtube.com/watch?v=o9pEzgHorH0">Stop Writing Classes</a>)</nobr></li>
-          <li class="fragment">Custom can make things very handy, but they can be a step backward unless you <strong>make them friendly</strong></li>
-          <li class="fragment">Friendly classes can require a lot of boilerplate code</li>
-          <li class="fragment">To avoid distracting boilerplate code, use <code>dataclasses</code> <span class="fragment">or <code>attrs</code> for creating custom data-heavy classes</span></li>
-        </ul>
-        <aside class="notes" data-markdown>
-          - So when making classes I'd like to you to consider **(click)** whether you even need a class.  Because you often don't.
-          - **(click)** There's a talk on this subject I'd recommend watching called Stop Writing Classes
-          - If you do decide you need a class, you should make it a friendly one.  **(click)** Using your class should feel *almost* as natural as using one of Python's built-in data types
-          - **(click)** Creating a friendly class involves writing a lot of boilerplate code
-          - **(click)** But the dataclasses library can help with this
-          - If you're on Python 3.7, it comes bundled with Python. If you're on an earlier version of Python 3, you can pip-install it.
-          - And there's always the attrs library **(click)**, for times when dataclasses isn't enough for you or if you're still using Python 2
-        </aside>
-      </section>
-
-      <section style="text-align: left;" data-background="#663399" data-background-transition="slide" data-transition="slide">
-        <h2>Need help getting your team <nobr>up to speed on Python?</nobr></h2>
-        <h3>
-          <strong>Trey Hunner</strong><br>
-          <small>Python &amp; Django Team Trainer</small>
-        </h3>
-        <p>
-          <small>
-            Contact me: <a href="mailto:&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;">&#116;&#114;&#101;&#121;&#064;&#116;&#114;&#117;&#116;&#104;&#102;&#117;&#108;&#046;&#116;&#101;&#099;&#104;&#110;&#111;&#108;&#111;&#103;&#121;</a>
-          </small>
-        </p>
-        <p>
-        <a href="http://truthful.technology"><img src="logo.svg" class="no-style logo"></a>
-        <a href="http://pythonmorsels.com"><img src="python-morsels-logo.svg" class="no-style logo"></a>
-        </p>
-        <aside class="notes" data-markdown>
-          - I'd love to help you improve your Python skills
-          - Find me in the halls or at my booth if you'd like to chat about that later
-          - Thank you!
-        </aside>
-      </section>
-
 
       </div>
     </div>
