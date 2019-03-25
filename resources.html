@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Trey Hunner">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style type="text/css">
+    .container {
+      width: auto;
+      max-width: 680px;
+      padding: 0 15px;
+      margin-top: 4em;
+    }
+    </style>
+
+    <title>Easier Classes: Python Classes Without All The Cruft</title>
+  </head>
+  <body>
+    <main role="main" class="container">
+    <header>
+      <h1>Easier Classes:</h1>
+      <h2>Python Classes Without All The Cruft</h1>
+    </header>
+
+    <hr>
+
+    <p>
+    Hello!
+    </p>
+    <p>
+    This is the resources page for my talk, <strong>Easier Classes: Python Classes Without All the Cruft</strong>.
+    This page contains information about the slides, links to tools and resources I mentioned in my talk, other recordings of this talk, information about me.
+    If you'd like to start a conversation with me or keep up with my work, you can find details on me at the bottom of this page.
+    </p>
+
+    <hr>
+
+    <h3>The slides</h3>
+    <p>
+    You can find the slides for the talk <a href="https://treyhunner.com/easier-classes">here</a>.
+    </p>
+    <p><a href="https://treyhunner.com/easier-classes" class="btn btn-outline-info btn-lg">Go see the slides!</a></p>
+
+    <hr>
+
+    <h3>The most important links</h3>
+    <p>
+    I talked about both third-party packages and standard library modules during my talk.
+    Here are links to the most important things I discussed in order:
+    </p>
+    <ul>
+      <li><a href="https://docs.python.org/3.7/library/functools.html#functools.total_ordering"><code>total_ordering</code></a></li>
+      <li><a href="https://docs.python.org/3/library/typing.html#typing.NamedTuple"><code>typing.NamedTuple</code></a> (and the older <a href="https://docs.python.org/3/library/collections.html#collections.namedtuple"><code>collections.namedtuple</code></a>)</li>
+      <li><a href="https://www.attrs.org"><code>attrs</code></a></li>
+      <li><a href="https://www.youtube.com/watch?v=o9pEzgHorH0">Stop Writing Classes</a></li>
+    </ul>
+
+    <hr>
+
+    <h3>Recording of this talk</h3>
+    <p>
+    You can watch the recording of this talk below.
+    </p>
+    <iframe width="100%" height="340" src="https://www.youtube.com/embed/vD1KZgHCNCs" frameborder="0" allowfullscreen></iframe>
+
+    <hr>
+
+    <h3>The "B Sides" slides</h3>
+    <p>
+    There are a few interesting dataclasses features that I didn't mention during my talk.
+    Some of these I didn't mention for the sake of time and some of these dive just a bit more into dataclasses than I had planned in this talk.
+    </p>
+    <p>
+    These missing slides include the following extra information:
+    <ul>
+      <li>If you wish dataclasses supported a specific bit of <strong>extra field-specific functionality</strong>, you might be able to implement it yourself by <a href="https://treyhunner.com/easier-classes/#/11/1">adding metadata to each of your dataclass fields</a>.</li>
+      <li>If you'd like to make <strong>some fields ignored in equality and ordering comparisons</strong>, you can make <a href="https://treyhunner.com/easier-classes/#/11/2">non-comparable dataclass fields</a>.</li>
+      <li>You can also <strong>use a factory function for default values</strong> with the <a href="https://treyhunner.com/easier-classes/#/11/3"><code>default_factory</code> field argument</a>.</li>
+      <li>And you can make <strong>generated attributes that are made after initialization</strong> with <a href="https://treyhunner.com/easier-classes/#/11/4">the init=False field argument and a <code>__post_init__</code> method</a>.</li>
+    </ul>
+    </p>
+    <p>You can find me presenting some of these slides in <a href="https://www.crowdcast.io/e/pyhouston/1/q/-LQLpM3xQsa_82JmuacQ">this live online presentation I gave for the PyHouston meetup</a>.</p>
+
+    <hr>
+
+    <h3>Related resources</h3>
+    <p>
+    <ul>
+      <li><a href="https://treyhunner.com/2018/06/how-to-make-an-iterator-in-python/">How to make an iterator in Python</a></li>
+      <li><a href="https://treyhunner.com/2019/03/python-deep-comparisons-and-code-readability/">TUple ordering and deep comparisons in Python</a></li>
+      <li><a href="https://docs.python.org/3/reference/datamodel.html#object.__setattr__"><code>__setattr__</code> documentation</a></li>
+      <li><a href="https://docs.python.org/3/reference/datamodel.html#object.__hash__"><code>__hash__</code> documentation</a></li>
+      <li><a href="https://sjirwin.github.io/pygotham2108-dataclasses/">"Dataclasses are here! Now what?" - Scott Irwin</a></li>
+      <li><a href="https://hackernoon.com/a-brief-tour-of-python-3-7-data-classes-22ee5e046517">A brief tour of Python 3.7 dataclasses</a></li>
+    </ul>
+    </p>
+
+    <hr>
+
+    <h3>Who Am I?</h3>
+    <img src="https://www.gravatar.com/avatar/93a988bd85040f58f8417dc4be78c7de?s=100" class="rounded float-left mr-2 mb-2">
+    <p>
+    My name is Trey and I help professional programmers improve their Python skills.
+    I run a <strong>Python skill-building service for individuals</strong> called <a href="https://www.pythonmorsels.com/"><nobr>Python Morsels</nobr></a> and I do on-site and remote <a href="https://truthful.technology/">Python training</a> for <strong>teams and corporations</strong>.
+    </p>
+
+		<p>
+		I write articles regularly at <a href="http://treyhunner.com">treyhunner.com</a>.
+		If you'd like to keep up with my writing, sign up for my <a href="https://www.getdrip.com/forms/121131143/submissions/new">email newsletter</a>.
+		You can also find me on Twitter as <a href="https://twitter.com/treyhunner">@treyhunner</a>.
+		</p>
+
+    <hr>
+
+    <h3>Chat with me about team learning</h3>
+
+    <p>
+		If you work in a team of folks who get paid to write Python code, I would love to chat about your team's Python skill-building strategies with you.
+    </p>
+    <p>
+    If you'd like to brainstorm team learning strategies with me, click the button below, fill out the form, and we'll chat.
+    </p>
+	  
+    <script src ="https://form.jotform.com/static/feedback2.js" type="text/javascript"></script><script type="text/javascript">
+      var JFL_83057138203148 = new JotformFeedback({
+        formId: '83057138203148',
+        base: 'https://form.jotform.com/',
+        windowTitle: 'Team Learning Chat Form',
+        background: '#FFA500',
+        fontColor: '#FFFFFF',
+        type: 'false',
+        height: 500,
+        width: 700,
+        openOnLoad: false
+      });
+    </script>
+    <button class="btn btn-success lightbox-83057138203148" style="margin-top: 16px">
+      Setup a Python team learning strategy call <span class="d-none d-sm-inline">with me</span>
+    </button>
+
+    <hr>
+
+    <h3>Build your Python skills every week</h3>
+
+    <p>
+    The best way to improve your skills is to <strong>practice</strong>.
+    It's hard to practice unless you have a regimen and a routine.
+    Making a practice routine on your own is time-consuming and hard.
+    </p>
+    <p>
+    Python Morsels can help!
+    Through <a href="https://www.pythonmorsels.com/">Python Morsels</a>, every Monday I send out one Python exercise.
+    These exercise are <strong>meant to help professional Python programmers to hone their skills</strong>, not brand new programmers.
+    They've been described as "Kreutzer's etudes for Python" and "like a reverse code review".
+    </p>
+    <p>
+    I send out the exercise on Monday morning which includes a base problem, bonuses, and automated tests to run against your code.
+    The exercise should take you up to 30 minutes.
+    On Wednesday I send out an email explaining different solutions for the exercise and <strong>why we might choose one technique over another</strong>.
+    </p>
+    <p>
+    If you'd like to try these out yourself, type in your email below:
+    </p>
+    </p>
+    <form method="post" action="https://www.pythonmorsels.com/signup/">
+      <div id="div_id_email" class="form-group"> <input type="email" name="email" placeholder="E-mail address" class="textinput textInput form-control" required="" id="id_email" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;"> </div>
+      <div class="form-check">
+        <label for="id_receive_announcements" class="form-check-label">
+          <input type="checkbox" name="receive_announcements" class="checkboxinput form-check-input" id="id_receive_announcements" checked="">
+          Get Python Morsels announcements
+        </label> 
+      </div>
+      <button type="submit" class="btn btn-info mt-3">
+        Sign up for Python Morsels <span class="id-none d-sm-inline">to grow your Python skills every week »</span>
+      </button>
+    </form>
+
+    <footer class="pt-3 my-4 border-top">
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="https://www.pythonmorsels.com/">Python Morsels</a></li>
+        <li class="list-inline-item"><a href="http://truthful.technology">Python Team Training</a></li>
+        <li class="list-inline-item"><a href="http://treyhunner.com">Trey's Writing</a></li>
+        <li class="list-inline-item"><a href="https://twitter.com/treyhunner">Trey's Twitter</a></li>
+      </ul>
+    </footer>
+
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  </body>
+</html>
